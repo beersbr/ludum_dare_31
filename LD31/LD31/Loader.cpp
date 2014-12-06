@@ -37,6 +37,69 @@ Loader::Loader(std::string configPath)
 	}
 }
 
+std::string Loader::pullStringFromJSON(rapidjson::Document& doc, const char* value)
+{
+	std::stringstream ss;
+
+	if(!doc.HasMember(value))
+	{
+		ss << "[!] " << value << " not found in JSON doc!\n";	
+		throw std::exception(ss.str().c_str());
+	}
+	if(!doc[value].IsString())
+	{
+		ss << "[!] " << value << " not interpreted as string!\n";	
+		throw std::exception(ss.str().c_str());
+	}
+	return doc[value].GetString();
+}
+
+std::map<std::string, std::string>* Loader::pullMapFromJSON(rapidjson::Document& doc)
+{
+	//std::stringstream ss;
+
+	if(!doc.IsObject())
+	{
+		fprintf(stdout, "[!] Cannot pull map from JSON as this isn't even an object!\n");
+		return NULL;
+	}
+	//TODO: Iterate through JSON object members
+	return NULL;
+}	
+
+Configuration* Loader::parseConfiguration(std::string jsonStr)
+{
+	Configuration* tmpConfig = new Configuration();
+	//We're assuming the configuration data is there and makes sense
+	rapidjson::Document configDoc;
+	if(configDoc.Parse<0>(jsonStr.c_str()).HasParseError())
+	{
+		//Malformed JSON maybe?
+		fprintf(stdout, "[!] Error parsing JSON document into object!");
+		return NULL;
+	}
+	if(!configDoc.IsObject())
+	{
+		//Root of our document isn't an object, and that's not OK
+		fprintf(stdout, "[!] Root of our document isn't a JSON object!");
+		return NULL;
+	}
+	try
+	{
+		tmpConfig->visualDataPath = pullStringFromJSON(configDoc, "visualData");
+		tmpConfig->audioDataPath = pullStringFromJSON(configDoc, "audioData");
+		tmpConfig->mapDataPath = pullStringFromJSON(configDoc, "mapData");
+		//tmpConfig->options = pullMapFromJSON(configDoc["options"]);
+		return tmpConfig;
+	}
+	catch(std::exception& ex)
+	{
+		fprintf(stdout, "[!] Caught exception trying to parse configuration file!\n");
+		fprintf(stdout, ex.what());
+		return NULL;
+	}
+}
+
 bool Loader::loadAssets()
 {
 	//Find the config file, use that to determine what we need to load for each part
@@ -55,8 +118,16 @@ bool Loader::loadAssets()
 
 	configJSON.assign((std::istreambuf_iterator<char>(ifstr)), (std::istreambuf_iterator<char>()));
 	fprintf(stdout, "[=] Read our JSON into Memory:\n");
-	fprintf(stdout, "================================\n");
-	fprintf(stdout, "%s", configJSON.c_str());
+	
+	//Parse the config file
+	this->config = parseConfiguration(configJSON);
+	if(!config)
+	{
+		throw std::exception("We couldn't parse the configuration file");
+	}
+
+	
+
 	return true;
 	
 }

@@ -13,7 +13,7 @@ public:
 	std::string visualDataPath;
 	std::string mapDataPath;
 	std::string audioDataPath;
-	std::map<std::string, std::string> options;
+	std::map<std::string, std::string>* options;
 	bool isLoaded;
 };
 
