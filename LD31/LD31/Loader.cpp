@@ -54,17 +54,28 @@ std::string Loader::pullStringFromJSON(rapidjson::Document& doc, const char* val
 	return doc[value].GetString();
 }
 
-std::map<std::string, std::string>* Loader::pullMapFromJSON(rapidjson::Document& doc)
+std::map<std::string, std::string>* Loader::pullMapFromJSON(rapidjson::Value& doc)
 {
-	//std::stringstream ss;
+	std::stringstream ss;
+	std::map<std::string, std::string>* tmpMap = new std::map<std::string, std::string>();
 
 	if(!doc.IsObject())
 	{
 		fprintf(stdout, "[!] Cannot pull map from JSON as this isn't even an object!\n");
 		return NULL;
 	}
-	//TODO: Iterate through JSON object members
-	return NULL;
+	for(rapidjson::Value::ConstMemberIterator itr = doc.MemberBegin(); itr != doc.MemberEnd(); itr++)
+	{
+		if(!itr->value.IsString())
+		{
+			ss << "[-] Parsing Options: Don't know what to do with " << itr->name.GetString() << " cuz it's not a string";
+			fprintf(stdout, ss.str().c_str());
+			continue;
+		}
+		
+		(*tmpMap)[itr->name.GetString()] = itr->value.GetString();
+	}
+	return tmpMap;
 }	
 
 Configuration* Loader::parseConfiguration(std::string jsonStr)
@@ -89,7 +100,15 @@ Configuration* Loader::parseConfiguration(std::string jsonStr)
 		tmpConfig->visualDataPath = pullStringFromJSON(configDoc, "visualData");
 		tmpConfig->audioDataPath = pullStringFromJSON(configDoc, "audioData");
 		tmpConfig->mapDataPath = pullStringFromJSON(configDoc, "mapData");
-		//tmpConfig->options = pullMapFromJSON(configDoc["options"]);
+		if(configDoc.HasMember("options"))
+		{
+			tmpConfig->options = pullMapFromJSON(configDoc["options"]);
+		}
+		else
+		{
+			tmpConfig->options = NULL;
+		}
+		tmpConfig->isLoaded = true;
 		return tmpConfig;
 	}
 	catch(std::exception& ex)
@@ -100,10 +119,69 @@ Configuration* Loader::parseConfiguration(std::string jsonStr)
 	}
 }
 
+std::map<std::string, std::map<std::string, std::string>*>* Loader::parseComponentData(std::string jsonStr)
+{
+	std::stringstream ss;
+	std::map<std::string, std::map<std::string, std::string>*>* tmpSuperMap = new std::map<std::string, std::map<std::string, std::string>*>();
+
+	rapidjson::Document compDoc;
+	if(compDoc.Parse<0>(jsonStr.c_str()).HasParseError())
+	{
+		fprintf(stdout, "[!] Error parsing JSON document into object!");
+		return NULL;
+	}
+
+	//add component section for extendability
+	if(!compDoc.HasMember("components"))
+	{
+		fprintf(stdout, "[!] No component member found in component json!");
+		return NULL;
+	}
+	if(!compDoc["components"].IsObject())
+	{
+		fprintf(stdout, "[!] Expected component member to be object, was something else");
+		return NULL;
+	}
+
+	const rapidjson::Value& compObj = compDoc["components"];
+	//Each object element should be an object representing a component
+	for(rapidjson::Value::ConstMemberIterator itr = compObj.MemberBegin(); itr != compObj.MemberEnd(); itr++)
+	{
+		if(!itr->value.IsObject())
+		{
+			ss << "[-] expected " << itr->name.GetString() << " to be an object, was something else";
+			continue;
+		}
+
+		(*tmpSuperMap)[itr->name.GetString()] = this->pullMapFromJSON((rapidjson::Value&)itr->value);
+
+	}
+}
+
+std::string* Loader::loadJSONStringFromFile(std::string path)
+{
+	std::ifstream ifstr(path);
+	std::string* json = new std::string();
+	if(!ifstr.good())
+	{
+		std::stringstream ss;
+		ss << "We couldn't open config file: " << configPath;
+		throw std::exception(ss.str().c_str());
+	}
+	ifstr.seekg(0, std::ios::end);
+	(*json).reserve(ifstr.tellg());
+	ifstr.seekg(0, std::ios::beg);
+
+	(*json).assign((std::istreambuf_iterator<char>(ifstr)), (std::istreambuf_iterator<char>()));
+
+	return json;
+}
+
 bool Loader::loadAssets()
 {
 	//Find the config file, use that to determine what we need to load for each part
 	//Then, call the appropriate load functions
+	/*
 	std::ifstream ifstr(this->configPath);
 	std::string configJSON;
 	if(!ifstr.good())
@@ -117,6 +195,8 @@ bool Loader::loadAssets()
 	ifstr.seekg(0, std::ios::beg);
 
 	configJSON.assign((std::istreambuf_iterator<char>(ifstr)), (std::istreambuf_iterator<char>()));
+	*/
+	std::string configJSON((*loadJSONStringFromFile(this->configPath)));
 	fprintf(stdout, "[=] Read our JSON into Memory:\n");
 	
 	//Parse the config file
@@ -126,7 +206,9 @@ bool Loader::loadAssets()
 		throw std::exception("We couldn't parse the configuration file");
 	}
 
-	
+	//now we have the configuration asset path, parse that.
+	std::string componentJSON((*loadJSONStringFromFile(this->config->visualDataPath)));
+	std::map<std::string, std::map<std::string, std::string>*>* test = parseComponentData(componentJSON);
 
 	return true;
 	
