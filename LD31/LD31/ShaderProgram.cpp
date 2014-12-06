@@ -86,10 +86,17 @@ bool ShaderProgram::CompileShader(ShaderProgram *shader, const bool forceRecompi
 	glGetShaderiv(vertexProgramID, GL_COMPILE_STATUS, &vertexCompileResult);
 	glGetShaderiv(vertexProgramID, GL_INFO_LOG_LENGTH, &compileVertexLogLength);
 	vertexCompileLogMessage.resize(compileVertexLogLength);
-	glGetShaderInfoLog(vertexProgramID, compileVertexLogLength, NULL, &vertexCompileLogMessage[0]);
+	//heavy: This breaks here for me, so putting in check
+	if(vertexCompileLogMessage.size() > 0)
+	{
+		glGetShaderInfoLog(vertexProgramID, compileVertexLogLength, NULL, &vertexCompileLogMessage[0]);
+		fprintf(stdout, " -- VERTEX SHADER COMPILED (%d)\n%s\n", vertexCompileResult, &vertexCompileLogMessage[0]);
+	}
+	else
+	{
+		fprintf(stdout, "[-] I don't know what's going on, but the vertexCompileLogMessage vector has no elements!\n");
 
-	fprintf(stdout, " -- VERTEX SHADER COMPILED (%d)\n%s\n", vertexCompileResult, &vertexCompileLogMessage[0]);
-
+	}
 	if(vertexCompileResult == GL_FALSE)
 		return false;
 
@@ -101,10 +108,16 @@ bool ShaderProgram::CompileShader(ShaderProgram *shader, const bool forceRecompi
 	glGetShaderiv(fragmentProgramID, GL_COMPILE_STATUS, &fragmentCompileResult);
 	glGetShaderiv(fragmentProgramID, GL_INFO_LOG_LENGTH, &compileFragmentLogLength);
 	fragmentCompileLogMessage.resize(compileFragmentLogLength);
-	glGetShaderInfoLog(fragmentProgramID, compileFragmentLogLength, NULL, &fragmentCompileLogMessage[0]);
-
-	fprintf(stdout, " -- FRAGMENT SHADER COMPILED (%d)\n%s\n", fragmentCompileResult, &fragmentCompileLogMessage[0]);
-
+	//heavy: This breaks here for me, so putting in check
+	if(fragmentCompileLogMessage.size() > 0)
+	{
+		glGetShaderInfoLog(fragmentProgramID, compileFragmentLogLength, NULL, &fragmentCompileLogMessage[0]);
+		fprintf(stdout, " -- FRAGMENT SHADER COMPILED (%d)\n%s\n", fragmentCompileResult, &fragmentCompileLogMessage[0]);
+	}
+	else
+	{
+		fprintf(stdout, "[-] I don't know what's going on, but the fragmentCompileLogMessage vector has no elements!\n");
+	}
 	if(fragmentCompileResult == GL_FALSE)
 		return false;
 
@@ -123,9 +136,16 @@ bool ShaderProgram::CompileShader(ShaderProgram *shader, const bool forceRecompi
 	glGetProgramiv(shader->shaderID, GL_LINK_STATUS, &linkResult);
 	glGetProgramiv(shader->shaderID, GL_INFO_LOG_LENGTH, &linkLogLength);
 	linkProgramLog.resize(linkLogLength);
-	glGetProgramInfoLog(shader->shaderID, linkLogLength, NULL, &linkProgramLog[0]);
-
-	fprintf(stdout, " -- PROGRAM LINKED (%d)\n%s\n", linkResult, &linkProgramLog[0]);
+	//heavy: This breaks here for me, so putting in check
+	if(linkProgramLog.size() > 0)
+	{
+		glGetProgramInfoLog(shader->shaderID, linkLogLength, NULL, &linkProgramLog[0]);
+		fprintf(stdout, " -- PROGRAM LINKED (%d)\n%s\n", linkResult, &linkProgramLog[0]);
+	}
+	else
+	{
+		fprintf(stdout, "[-] I don't kow what's going on, but the linkProgramLog vector has no elements!\n");
+	}
 
 	if(linkResult == GL_FALSE)
 		return false;
