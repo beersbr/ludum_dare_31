@@ -13,6 +13,7 @@ public:
 
 public:
 	std::vector<Component*> components;
+	
 	glm::vec3 pos;
 	glm::vec3 size;
 };
