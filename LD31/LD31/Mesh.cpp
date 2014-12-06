@@ -9,7 +9,6 @@ Mesh::Mesh(void)
 	shader = ShaderProgram::shaders["main"];
 }
 
-
 Mesh::~Mesh(void)
 {
 

@@ -12,11 +12,11 @@ public:
 	Component();
 	virtual ~Component();
 
-	template <typename T>
-	static T* CreateComponent()
-	{
-		family = T::family
-	}
+	//template <typename T>
+	//static T* CreateComponent()
+	//{
+	//	family = T::family
+	//}
 
 	// TODO: accept a json string with the props
 	//virtual void Create(jsonString) = 0;
