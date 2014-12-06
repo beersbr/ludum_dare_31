@@ -15,7 +15,15 @@ public:
 	~Entity(void);
 
 	bool HasComponent(std::string const family) const;
+
+	template <typename T>
+	T* TGetComponent()
+	{
+		return 
+	}
+
 	Component* GetComponent(std::string const family);
+
 
 public:
 	std::map<std::string, Component*> components;
