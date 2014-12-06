@@ -8,7 +8,7 @@ class Component
 {
 public:
 	Component();
-	//virtual void Update(float dt) = 0;
+	virtual ~Component();
 
 	// TODO: accept a json string with the props
 	//virtual void Create(jsonString) = 0;

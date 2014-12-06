@@ -14,13 +14,13 @@ public:
 	Entity(void);
 	~Entity(void);
 
-	//bool HasComponent(std::string family) const;
-	//Component* GetComponent() const;
-
+	bool HasComponent(std::string const family) const;
+	Component* GetComponent(std::string const family);
 
 public:
 	std::map<std::string, Component*> components;
-	
+	std::vector<Entity*> entities;
+
 	glm::vec3 pos;
 	glm::vec3 size;
 };
