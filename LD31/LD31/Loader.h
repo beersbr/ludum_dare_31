@@ -3,7 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include "rapidjson\document.h"
-#include "rapidjson\stringbuffer.h"
 #include "Configuration.h"
 
 class Loader
