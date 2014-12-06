@@ -40,7 +40,6 @@ public:
 
 	GLuint renderMethod;
 
-
 	ShaderProgram *shader;
 };
 
