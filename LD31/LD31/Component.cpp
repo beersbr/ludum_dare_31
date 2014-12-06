@@ -18,6 +18,5 @@ void Component::SetOwner(Entity* e)
 
 Component::~Component()
 {
-	if(owner != nullptr)
-		delete owner;
+	safe_delete<Entity>(owner);
 }

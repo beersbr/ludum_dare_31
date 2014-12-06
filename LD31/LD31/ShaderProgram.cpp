@@ -14,6 +14,12 @@ ShaderProgram::~ShaderProgram(void)
 
 }
 
+GLuint ShaderProgram::Uniform(std::string uname) const
+{
+	// TODO: Do error checking here
+	return glGetUniformLocation(shaderID, uname.c_str());
+}
+
 ShaderProgram* ShaderProgram::CreateShader(std::string name, std::string vertexPath, std::string fragmentPath)
 {
 

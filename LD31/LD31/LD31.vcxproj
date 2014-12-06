@@ -143,24 +143,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="Loader.cpp" />
     <ClCompile Include="LudumGame.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="SimpleSquareComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
+    <ClInclude Include="Configuration.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="Loader.h" />
     <ClInclude Include="LudumGame.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="SimpleSquareComponent.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="main_fragment.glsl" />
     <None Include="main_vertex.glsl" />
+    <None Include="MasterConfig.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

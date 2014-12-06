@@ -3,9 +3,11 @@
 
 SimpleSquareComponent::SimpleSquareComponent(void)
 {
-}
 
+}
 
 SimpleSquareComponent::~SimpleSquareComponent(void)
 {
+
 }
+

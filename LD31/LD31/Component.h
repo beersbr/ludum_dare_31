@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+#include "Util.h"
+
 class Entity;
 
 class Component
@@ -9,6 +11,12 @@ class Component
 public:
 	Component();
 	virtual ~Component();
+
+	template <typename T>
+	static T* CreateComponent()
+	{
+		family = T::family
+	}
 
 	// TODO: accept a json string with the props
 	//virtual void Create(jsonString) = 0;

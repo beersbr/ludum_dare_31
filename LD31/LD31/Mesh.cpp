@@ -1,0 +1,76 @@
+#include "Mesh.h"
+
+
+Mesh::Mesh(void)
+{
+	transform = glm::mat4(1.0);
+	renderMethod = GL_TRIANGLES;
+
+	shader = ShaderProgram::shaders["main"];
+}
+
+
+Mesh::~Mesh(void)
+{
+
+}
+
+void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir)
+{
+	glUniformMatrix4fv(shader->Uniform("model"), 1, GL_FALSE, glm::value_ptr(transform));
+	glUniformMatrix4fv(shader->Uniform("view"), 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(shader->Uniform("projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+	glUniform3fv(shader->Uniform("dirLight0"), 1, glm::value_ptr(lightDir));
+
+
+	glEnableVertexAttribArray(position);
+	glEnableVertexAttribArray(color);
+	glEnableVertexAttribArray(normal);
+
+	// vertices
+	GLuint vbo = -1;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*v.size(), &(v[0]), GL_STATIC_DRAW);
+	glVertexAttribPointer(
+		position,   // the location in shader
+		3,			// number of elements vec_3_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		0,			// stride
+		(void*)0	// offset
+	);
+
+	// colors
+	GLuint vco = -1;
+	glGenBuffers(1, &vco);
+	glBindBuffer(GL_ARRAY_BUFFER, vco);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*c.size(), &(c[0]), GL_STATIC_DRAW);
+	glVertexAttribPointer(
+		color,   // the location in shader
+		3,			// number of elements vec_3_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		0,			// stride
+		(void*)0	// offset
+	);
+
+	// surface normals
+	GLuint vno = -1;
+	glGenBuffers(1, &vno);
+	glBindBuffer(GL_ARRAY_BUFFER, vno);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*n.size(), &(n[0]), GL_STATIC_DRAW);
+	glVertexAttribPointer(
+		color,   // the location in shader
+		3,			// number of elements vec_3_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		0,			// stride
+		(void*)0	// offset
+	);
+
+	glDisableVertexAttribArray(position);
+	glDisableVertexAttribArray(color);
+	glDisableVertexAttribArray(normal);
+}
