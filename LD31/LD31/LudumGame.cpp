@@ -12,6 +12,12 @@ LudumGame::~LudumGame(void)
 
 void LudumGame::Init()
 {
+	if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
+	{
+		fprintf(stdout, "Could not initialize SDL2\n");
+		exit(1);
+	}
+
 	isRunning = true;
 	ViewportWidth = 1200;
 	ViewportHeight = 800; 
@@ -29,6 +35,21 @@ void LudumGame::Init()
 
 	context = SDL_GL_CreateContext(window);
 
+	// initialize OpenGL
+	glEnable(GL_TEXTURE_2D_ARRAY);
+	glewExperimental = true;
+	if(glewInit() != GLEW_OK)
+	{
+		fprintf(stdout, "Could not Initialize glew :(\n");
+		exit(1);
+	}
+
+	glewGetExtension("GL_VERSION_3_3");
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 }
 
 void LudumGame::Update(float dt)
@@ -36,6 +57,12 @@ void LudumGame::Update(float dt)
 
 void LudumGame::Render(float dt)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+
+
+	SDL_GL_SwapWindow(window);
+
 }
 
 void LudumGame::Cleanup()
@@ -50,6 +77,11 @@ void LudumGame::HandleEvents()
 	{
 		switch(event.type)
 		{
+		case SDL_QUIT:
+			{
+				isRunning = false;
+			}
+			break;
 		default:
 			{
 				fprintf(stdout, "EVENT TYPE: %d\n", event.type);

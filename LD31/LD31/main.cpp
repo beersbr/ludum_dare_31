@@ -1,13 +1,12 @@
 #include <iostream>
-#include <SDL.h>
+
+#include "LudumGame.h";
 
 int main(int argc, char* argv[])
 {
 	
-	if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
-		return 0;
-	}
+	LudumGame game;
+	game.Run();
 
 	return 0;
 }
