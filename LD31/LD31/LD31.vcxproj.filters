@@ -51,4 +51,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="main_vertex.glsl" />
+    <None Include="main_fragment.glsl" />
+  </ItemGroup>
 </Project>
