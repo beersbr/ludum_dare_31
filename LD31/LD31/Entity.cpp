@@ -4,9 +4,11 @@
 
 Entity::Entity(void)
 {
+	components.clear();
 }
 
 
 Entity::~Entity(void)
 {
+
 }

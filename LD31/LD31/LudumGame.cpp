@@ -62,7 +62,6 @@ void LudumGame::Render(float dt)
 
 
 	SDL_GL_SwapWindow(window);
-
 }
 
 void LudumGame::Cleanup()

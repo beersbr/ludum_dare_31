@@ -1,11 +1,17 @@
 #include "Component.h"
+#include "Entity.h"
 
-
-Component::Component(void)
+Component::Component()
 {
+
 }
 
-
-Component::~Component(void)
+Entity* Component::GetOwner() const
 {
+	return owner;
+}
+
+void Component::SetOwner(Entity* e)
+{
+	owner = e;
 }

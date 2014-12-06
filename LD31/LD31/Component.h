@@ -1,11 +1,28 @@
 #pragma once
+#include <iostream>
+#include <string>
 
-#include "Entity.h"
+class Entity;
 
 class Component
 {
 public:
-	Component(void);
-	~Component(void);
+	Component();
+	//virtual void Update(float dt) = 0;
+
+	// TODO: accept a json string with the props
+	//virtual void Create(jsonString) = 0;
+
+public:
+	Entity* GetOwner() const;
+	void SetOwner(Entity* e);
+
+public:
+	std::string family;
+	std::string name;
+
+protected:
+	Entity* owner;
+
 };
 
