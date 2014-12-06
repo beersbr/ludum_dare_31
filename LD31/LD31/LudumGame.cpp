@@ -14,7 +14,7 @@ void LudumGame::Init()
 {
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
-		fprintf(stdout, "Could not initialize SDL2\n");
+		fprintf(stdout, "ERROR: Could not initialize SDL2.\n");
 		exit(1);
 	}
 
@@ -35,13 +35,16 @@ void LudumGame::Init()
 
 	context = SDL_GL_CreateContext(window);
 
+	SDL_GL_SetSwapInterval(1);
+
 	// initialize OpenGL
 	glEnable(GL_TEXTURE_2D_ARRAY);
 	glewExperimental = true;
 	if(glewInit() != GLEW_OK)
 	{
-		fprintf(stdout, "Could not Initialize glew :(\n");
-		exit(1);
+		fprintf(stdout, "ERROR: Could not Initialize glew.\n");
+		isRunning = false;
+		return;
 	}
 
 	glewGetExtension("GL_VERSION_3_3");
@@ -49,6 +52,19 @@ void LudumGame::Init()
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+
+	glGenVertexArrays(1, &VAO);
+	if(VAO < 0)
+	{
+		fprintf(stdout, "ERROR: Could not get a VAO for opengl\n");
+		isRunning = false;
+		return;
+	}
+
+	glBindVertexArray(VAO);
+
+	ShaderProgram *s = ShaderProgram::CreateShader("main", "main_vertex.glsl", "main_fragment.glsl");
+	
 
 }
 

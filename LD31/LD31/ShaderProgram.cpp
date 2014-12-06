@@ -80,7 +80,7 @@ bool ShaderProgram::CompileShader(ShaderProgram *s, const bool forceRecompile)
 		return false;
 
 	// check if the fragment shader compile ok
-	glShaderSource(fragmentProgramID, 1, &vertexSource, NULL);
+	glShaderSource(fragmentProgramID, 1, &fragmentSource, NULL);
 	glCompileShader(fragmentProgramID);
 
 	
@@ -115,6 +115,8 @@ bool ShaderProgram::CompileShader(ShaderProgram *s, const bool forceRecompile)
 
 	if(linkResult == GL_FALSE)
 		return false;
+
+	fprintf(stdout, " -- Shader compiled OK \n");
 
 	glDeleteProgram(vertexProgramID);
 	glDeleteProgram(fragmentProgramID);
