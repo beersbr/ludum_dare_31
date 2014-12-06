@@ -53,6 +53,9 @@ void LudumGame::Init()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
+	//Game Loading
+	this->loaderKing = new Loader();
+
 	glGenVertexArrays(1, &VAO);
 	if(VAO < 0)
 	{
