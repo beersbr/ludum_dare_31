@@ -1,3 +1,7 @@
+# visual studio files
+*.opensdf
+*.sdf
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
