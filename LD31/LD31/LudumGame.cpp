@@ -50,6 +50,10 @@ void LudumGame::Init()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
+
+	//Game Loading
+	this->loaderKing = new Loader();
+
 }
 
 void LudumGame::Update(float dt)

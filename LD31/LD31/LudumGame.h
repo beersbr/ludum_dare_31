@@ -7,6 +7,7 @@
 
 #include "Entity.h"
 #include "InputHandler.h"
+#include "Loader.h"
 
 class LudumGame
 {
@@ -34,6 +35,7 @@ public:
 
 private:
 	InputHandler inputKing;
+	Loader* loaderKing;
 
 };
 
