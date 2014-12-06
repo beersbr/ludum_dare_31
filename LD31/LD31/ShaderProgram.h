@@ -18,6 +18,9 @@ public:
 	// return the uniform location id
 	GLuint Uniform(std::string) const; 
 
+	void Enable();
+	void Disable();
+
 	static ShaderProgram* CreateShader(std::string name, std::string vertexPath, std::string fragmentPath);
 	static bool CompileShader(ShaderProgram *shader, const bool forceRecompile = false);
 	static std::string ReadFile(std::string const filePath);

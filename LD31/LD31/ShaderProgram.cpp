@@ -20,6 +20,16 @@ GLuint ShaderProgram::Uniform(std::string uname) const
 	return glGetUniformLocation(shaderID, uname.c_str());
 }
 
+void ShaderProgram::Enable()
+{
+	glUseProgram(shaderID);
+}
+
+void ShaderProgram::Disable()
+{
+	glUseProgram(0);
+}
+
 ShaderProgram* ShaderProgram::CreateShader(std::string name, std::string vertexPath, std::string fragmentPath)
 {
 
@@ -38,23 +48,21 @@ ShaderProgram* ShaderProgram::CreateShader(std::string name, std::string vertexP
 	return ShaderProgram::shaders[name];
 }
 
-bool ShaderProgram::CompileShader(ShaderProgram *s, const bool forceRecompile)
+bool ShaderProgram::CompileShader(ShaderProgram *shader, const bool forceRecompile)
 {
-	if(s->shaderID <= 0 && !forceRecompile)
+	if(shader->shaderID <= 0 && !forceRecompile)
 	{
-		fprintf(stdout, "(%s): WARNING: attempt to compile previously compiled shader. ( current program ID: %d)\n", __FILE__, s->shaderID);
+		fprintf(stdout, "(%s): WARNING: attempt to compile previously compiled shader. ( current program ID: %d)\n", __FILE__, shader->shaderID);
 		return false;
 	}
 
 	if(forceRecompile)
 	{
-		fprintf(stdout, "(%s): WARNING: Recompiling previously compiled shader. (current  program ID: %d)\n", __FILE__, s->shaderID);
+		fprintf(stdout, "(%s): WARNING: Recompiling previously compiled shader. (current  program ID: %d)\n", __FILE__, shader->shaderID);
 	}
 
-	ShaderProgram shader = *s;
-
-	shader.vertexShaderCode = ShaderProgram::ReadFile(shader.vertexShaderPath);
-	shader.fragmentShaderCode = ShaderProgram::ReadFile(shader.fragmentShaderPath);
+	shader->vertexShaderCode = ShaderProgram::ReadFile(shader->vertexShaderPath);
+	shader->fragmentShaderCode = ShaderProgram::ReadFile(shader->fragmentShaderPath);
 
 	GLuint vertexProgramID = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragmentProgramID = glCreateShader(GL_FRAGMENT_SHADER);;
@@ -68,8 +76,8 @@ bool ShaderProgram::CompileShader(ShaderProgram *s, const bool forceRecompile)
 	GLint vertexCompileResult = GL_FALSE;
 	GLint fragmentCompileResult = GL_FALSE;
 
-	const char* vertexSource = shader.vertexShaderCode.c_str();
-	const char* fragmentSource = shader.fragmentShaderCode.c_str();
+	const char* vertexSource = shader->vertexShaderCode.c_str();
+	const char* fragmentSource = shader->fragmentShaderCode.c_str();
 
 	// check if the vertex shader compile ok
 	glShaderSource(vertexProgramID, 1, &vertexSource, NULL);
@@ -102,27 +110,27 @@ bool ShaderProgram::CompileShader(ShaderProgram *s, const bool forceRecompile)
 
 
 	// link the programs and get shader ID
-	shader.shaderID = glCreateProgram();
-	glAttachShader(shader.shaderID, vertexProgramID);
-	glAttachShader(shader.shaderID, fragmentProgramID);
-	glLinkProgram(shader.shaderID);
+	shader->shaderID = glCreateProgram();
+	glAttachShader(shader->shaderID, vertexProgramID);
+	glAttachShader(shader->shaderID, fragmentProgramID);
+	glLinkProgram(shader->shaderID);
 
 	// check that everything linked ok
 	std::vector<char> linkProgramLog = std::vector<char>(0);
 	int linkLogLength = 0;
 	GLint linkResult = GL_FALSE;
 	
-	glGetProgramiv(shader.shaderID, GL_LINK_STATUS, &linkResult);
-	glGetProgramiv(shader.shaderID, GL_INFO_LOG_LENGTH, &linkLogLength);
+	glGetProgramiv(shader->shaderID, GL_LINK_STATUS, &linkResult);
+	glGetProgramiv(shader->shaderID, GL_INFO_LOG_LENGTH, &linkLogLength);
 	linkProgramLog.resize(linkLogLength);
-	glGetProgramInfoLog(shader.shaderID, linkLogLength, NULL, &linkProgramLog[0]);
+	glGetProgramInfoLog(shader->shaderID, linkLogLength, NULL, &linkProgramLog[0]);
 
 	fprintf(stdout, " -- PROGRAM LINKED (%d)\n%s\n", linkResult, &linkProgramLog[0]);
 
 	if(linkResult == GL_FALSE)
 		return false;
 
-	fprintf(stdout, " -- Shader compiled OK \n");
+	fprintf(stdout, " -- Shader compiled OK (id: %d)\n", shader->shaderID);
 
 	glDeleteProgram(vertexProgramID);
 	glDeleteProgram(fragmentProgramID);

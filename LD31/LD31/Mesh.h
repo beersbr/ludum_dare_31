@@ -35,7 +35,7 @@ public:
 	std::vector<glm::vec3> c; // colors
 	std::vector<glm::vec3> n; // normals
 	std::vector<glm::vec2> t; // texutre coords
-	std::vector<GLuint>    e; // elements
+	std::vector<GLubyte>   e; // elements
 
 
 	GLuint renderMethod;
