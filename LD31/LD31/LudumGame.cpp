@@ -31,11 +31,12 @@ void LudumGame::Init()
 
 }
 
-void LudumGame::Update()
+void LudumGame::Update(float dt)
 {}
 
-void LudumGame::Render()
-{}
+void LudumGame::Render(float dt)
+{
+}
 
 void LudumGame::Cleanup()
 {}
