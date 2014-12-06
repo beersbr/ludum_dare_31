@@ -79,11 +79,11 @@ void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, veo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*e.size(), &(e[0]), GL_STATIC_DRAW);
 
-		glDrawElements(GL_TRIANGLES, e.size(), GL_UNSIGNED_BYTE, 0);
+		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(e.size()), GL_UNSIGNED_BYTE, 0);
 	}
 	else 
 	{
-		glDrawArrays(renderMethod, 0, v.size());
+		glDrawArrays(renderMethod, 0, static_cast<GLsizei>(v.size()));
 	}
 
 	glDisableVertexAttribArray(position);

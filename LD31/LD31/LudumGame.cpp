@@ -79,52 +79,7 @@ void LudumGame::Render(float dt)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.3f, 0.0f, 0.3f, 1.0f);
 
-	float hvw = ViewportWidth/2;
-	float hvh = ViewportHeight/2;
-
-	glm::mat4 Projection = glm::ortho(-hvw, hvw, -hvh, hvh, 500.0f, -500.0f);
-	glm::mat4 View = glm::lookAt(
-		glm::vec3(0.0, 0.0, 500.0),
-		glm::vec3(0.0, 0.0, 0.0),
-		glm::vec3(0.0, 1.0, 0.0)
-		);
-
-	Mesh m;
-
-	m.transform = glm::scale(m.transform, glm::vec3(100.0, 100.0, 100.0));
-
-	// vertices
-	/*
-		0 -- 2
-		|    |
-		1 -- 3
-	*/
-	m.v.push_back(glm::vec3(-1.0,  1.0,  0.0));
-	m.v.push_back(glm::vec3(-1.0, -1.0,  0.0));
-	m.v.push_back(glm::vec3( 1.0,  1.0,  0.0));
-	m.v.push_back(glm::vec3( 1.0, -1.0,  0.0));
-
-	// colors
-	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
-	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
-	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
-	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
-
-	// normals
-	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
-	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
-	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
-	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
-
-	// elements
-	m.e.push_back(0);
-	m.e.push_back(1);
-	m.e.push_back(2);
-	m.e.push_back(2);
-	m.e.push_back(1);
-	m.e.push_back(3);
-
-	m.Render(Projection, View, glm::vec3(1.0, 1.0, 1.0));
+	MeshTest();
 
 	SDL_GL_SwapWindow(window);
 }
@@ -198,9 +153,61 @@ void LudumGame::Run()
 		HandleEvents();
 		Update(dt);
 		Render(dt);
-
-
 	}
 
 	Cleanup();
+}
+
+
+/*********************************************
+TEST FUNCTIONS
+**********************************************/
+void LudumGame::MeshTest()
+{
+	float hvw = static_cast<float>(ViewportWidth/2);
+	float hvh = static_cast<float>(ViewportHeight/2);
+
+	glm::mat4 Projection = glm::ortho(-hvw, hvw, -hvh, hvh, 500.0f, -500.0f);
+	glm::mat4 View = glm::lookAt(
+		glm::vec3(0.0, 0.0, 500.0),
+		glm::vec3(0.0, 0.0, 0.0),
+		glm::vec3(0.0, 1.0, 0.0)
+		);
+
+	Mesh m;
+
+	m.transform = glm::scale(m.transform, glm::vec3(100.0, 100.0, 100.0));
+
+	// vertices
+	/*
+		0 -- 2
+		|    |
+		1 -- 3
+	*/
+	m.v.push_back(glm::vec3(-1.0,  1.0,  0.0));
+	m.v.push_back(glm::vec3(-1.0, -1.0,  0.0));
+	m.v.push_back(glm::vec3( 1.0,  1.0,  0.0));
+	m.v.push_back(glm::vec3( 1.0, -1.0,  0.0));
+
+	// colors
+	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
+	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
+	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
+	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
+
+	// normals
+	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
+	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
+	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
+	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
+
+	// elements
+	m.e.push_back(0);
+	m.e.push_back(1);
+	m.e.push_back(2);
+	m.e.push_back(2);
+	m.e.push_back(1);
+	m.e.push_back(3);
+
+	m.Render(Projection, View, glm::vec3(1.0, 1.0, 1.0));
 }

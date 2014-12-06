@@ -37,7 +37,6 @@ public:
 	std::vector<glm::vec2> t; // texutre coords
 	std::vector<GLubyte>   e; // elements
 
-
 	GLuint renderMethod;
 
 	ShaderProgram *shader;

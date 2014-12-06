@@ -22,9 +22,11 @@ public:
 	void Render(float dt);
 	void Cleanup();
 	void HandleEvents();
-	int getMouseX;
-	int getMouseY;
 	void Run();
+
+	// test 
+
+	void MeshTest();
 
 public:
 	std::string WindowTitle;
