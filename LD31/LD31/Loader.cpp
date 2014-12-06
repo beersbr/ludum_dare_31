@@ -156,6 +156,8 @@ std::map<std::string, std::map<std::string, std::string>*>* Loader::parseCompone
 		(*tmpSuperMap)[itr->name.GetString()] = this->pullMapFromJSON((rapidjson::Value&)itr->value);
 
 	}
+
+	return tmpSuperMap;
 }
 
 std::string* Loader::loadJSONStringFromFile(std::string path)
@@ -208,8 +210,7 @@ bool Loader::loadAssets()
 
 	//now we have the configuration asset path, parse that.
 	std::string componentJSON((*loadJSONStringFromFile(this->config->visualDataPath)));
-	std::map<std::string, std::map<std::string, std::string>*>* test = parseComponentData(componentJSON);
-
+	this->componentData = parseComponentData(componentJSON);
 	return true;
 	
 }
