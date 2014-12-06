@@ -6,10 +6,6 @@ Component::Component()
 
 }
 
-Component::~Component()
-{
-}
-
 Entity* Component::GetOwner() const
 {
 	return owner;
