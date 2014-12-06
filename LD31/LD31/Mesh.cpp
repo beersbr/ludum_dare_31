@@ -70,6 +70,20 @@ void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir
 		(void*)0	// offset
 	);
 
+	if(e.size() > 0)
+	{
+		GLuint veo = -1;
+		glGenBuffers(1, &veo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, veo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(glm::vec3)*e.size(), &(e[0]), GL_STATIC_DRAW);
+
+		glDrawElements(renderMethod, static_cast<GLsizei>(e.size()), GL_UNSIGNED_BYTE, 0);
+	}
+	else 
+	{
+		glDrawArrays(renderMethod, 0, static_cast<GLsizei>(v.size()));
+	}
+
 	glDisableVertexAttribArray(position);
 	glDisableVertexAttribArray(color);
 	glDisableVertexAttribArray(normal);
