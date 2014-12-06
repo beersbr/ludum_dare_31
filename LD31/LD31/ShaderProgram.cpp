@@ -25,7 +25,7 @@ bool ShaderProgram::CompileShader(ShaderProgram shader, const bool debug)
 	int compileVertexLogLength = 0;
 	int compileFragmentLogLength = 0;
 
-	std::vector<char> vectorCompileLogMessage = std::vector<char>(0);
+	std::vector<char> vertexCompileLogMessage = std::vector<char>(0);
 	std::vector<char> fragmentCompileLogMessage = std::vector<char>(0);
 
 	GLint vertexCompileResult = GL_FALSE;
@@ -41,29 +41,28 @@ bool ShaderProgram::CompileShader(ShaderProgram shader, const bool debug)
 
 	glGetShaderiv(vertexProgramID, GL_COMPILE_STATUS, &vertexCompileResult);
 	glGetShaderiv(vertexProgramID, GL_INFO_LOG_LENGTH, &compileVertexLogLength);
-	vectorCompileLogMessage.resize(compileVertexLogLength);
-	glGetShaderInfoLog(vertexProgramID, compileVertexLogLength, NULL, &vectorCompileLogMessage[0]);
+	vertexCompileLogMessage.resize(compileVertexLogLength);
+	glGetShaderInfoLog(vertexProgramID, compileVertexLogLength, NULL, &vertexCompileLogMessage[0]);
 
-	fprintf(stdout, " -- VERTEX SHADER COMPILED (%d)\n%s\n", vertexCompileResult, &vectorCompileLogMessage[0]);
+	fprintf(stdout, " -- VERTEX SHADER COMPILED (%d)\n%s\n", vertexCompileResult, &vertexCompileLogMessage[0]);
 
 	if(vertexCompileResult == GL_FALSE)
 		return false;
 
 	
-
 	// check if the fragment shader compile ok
 	glShaderSource(fragmentProgramID, 1, &vertexSource, NULL);
 	glCompileShader(fragmentProgramID);
 
 	
-	glGetShaderiv(fragmentProgramID, GL_COMPILE_STATUS, &vertexCompileResult);
-	glGetShaderiv(fragmentProgramID, GL_INFO_LOG_LENGTH, &compileVertexLogLength);
-	vectorCompileLogMessage.resize(compileVertexLogLength);
-	glGetShaderInfoLog(fragmentProgramID, compileVertexLogLength, NULL, &vectorCompileLogMessage[0]);
+	glGetShaderiv(fragmentProgramID, GL_COMPILE_STATUS, &fragmentCompileResult);
+	glGetShaderiv(fragmentProgramID, GL_INFO_LOG_LENGTH, &compileFragmentLogLength);
+	fragmentCompileLogMessage.resize(compileFragmentLogLength);
+	glGetShaderInfoLog(fragmentProgramID, compileFragmentLogLength, NULL, &fragmentCompileLogMessage[0]);
 
-	fprintf(stdout, " -- VERTEX SHADER COMPILED (%d)\n%s\n", vertexCompileResult, &vectorCompileLogMessage[0]);
+	fprintf(stdout, " -- FRAGMENT SHADER COMPILED (%d)\n%s\n", fragmentCompileResult, &fragmentCompileLogMessage[0]);
 
-	if(vertexCompileResult == GL_FALSE)
+	if(fragmentCompileResult == GL_FALSE)
 		return false;
 
 

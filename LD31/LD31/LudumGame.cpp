@@ -84,10 +84,11 @@ void LudumGame::HandleEvents()
 		case SDL_KEYDOWN:
 			{
 				this->inputKing.evalKeyDown(event);
+				break;
 			}
 		case SDL_KEYUP:
 			{
-				//Maybe we queue a key-down event and only act when the key is up? For now, do nothing;
+				this->inputKing.evalKeyUp(event);
 				break;
 			}
 		case SDL_WINDOWEVENT:
@@ -97,12 +98,12 @@ void LudumGame::HandleEvents()
 			}
 		case SDL_MOUSEBUTTONDOWN:
 			{
-				this->inputKing.evalMouseButton(event);
+				this->inputKing.evalMouseDown(event);
 				break;
 			}
 		case SDL_MOUSEBUTTONUP:
 			{
-				//See keydown/up
+				this->inputKing.evalMouseUp(event);
 				break;
 			}
 		case SDL_MOUSEMOTION:
