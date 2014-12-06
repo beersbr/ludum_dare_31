@@ -6,6 +6,7 @@
 #include <SDL_opengl.h>
 
 #include "Entity.h"
+#include "InputHandler.h"
 
 class LudumGame
 {
@@ -18,7 +19,8 @@ public:
 	void Render(float dt);
 	void Cleanup();
 	void HandleEvents();
-
+	int getMouseX;
+	int getMouseY;
 	void Run();
 
 public:
@@ -29,6 +31,9 @@ public:
 	SDL_Window* window;
 	SDL_GLContext context;
 	bool isRunning;
+
+private:
+	InputHandler inputKing;
 
 };
 
