@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "InputHandler.h"
 #include "Loader.h"
+#include "ShaderProgram.h"
 
 class LudumGame
 {
@@ -36,6 +37,8 @@ public:
 private:
 	InputHandler inputKing;
 	Loader* loaderKing;
+
+	GLuint VAO; // vertex array object :: OpenGL
 
 };
 
