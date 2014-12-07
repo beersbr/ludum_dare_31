@@ -17,7 +17,8 @@
 enum SHADER { 
 	position = 0,
 	color,
-	normal
+	normal,
+	uv
 };
 
 class Mesh
@@ -40,7 +41,7 @@ public:
 
 	GLuint renderMethod;
 
-	GLuint imageID;
+	GLuint textureID;
 
 	ShaderProgram *shader;
 };

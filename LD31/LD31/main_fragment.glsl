@@ -1,9 +1,11 @@
 #version 330 core
 
-in vec3 fragColor;
-out vec4 finalFragColor;
+uniform sampler2D tex0;
+
+in vec2 UVc;
+out vec3 finalFragColor;
 
 void main()
 {
-	finalFragColor = vec4(fragColor, 1.0);
+	finalFragColor = texture2D(tex0, UVc).rgb;
 }

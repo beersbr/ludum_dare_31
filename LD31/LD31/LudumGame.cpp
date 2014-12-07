@@ -22,9 +22,13 @@ void LudumGame::Init()
 	ViewportWidth = 1200;
 	ViewportHeight = 800; 
 
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 	window = SDL_CreateWindow(WindowTitle.c_str(), 
 		SDL_WINDOWPOS_CENTERED,
@@ -35,14 +39,7 @@ void LudumGame::Init()
 
 	context = SDL_GL_CreateContext(window);
 
-	// so that we can load jpgs
-	IMG_Init(IMG_INIT_JPG);
-
-	SDL_GL_SetSwapInterval(1);
-
-	// initialize OpenGL
-	glEnable(GL_TEXTURE_2D_ARRAY);
-	glewExperimental = true;
+	glewExperimental = GL_TRUE;
 	if(glewInit() != GLEW_OK)
 	{
 		fprintf(stdout, "ERROR: Could not Initialize glew.\n");
@@ -50,12 +47,29 @@ void LudumGame::Init()
 		return;
 	}
 
-	glewGetExtension("GL_VERSION_3_3");
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	// so that we can load jpgs
+	IMG_Init(IMG_INIT_JPG);
 
+	SDL_GL_SetSwapInterval(1);
+
+	// initialize OpenGL
+	//glEnable(GL_TEXTURE_2D_ARRAY);
+
+	int err1 = glGetError();
+	int sup = glewGetExtension("GL_VERSION_3_3");
+	
+	int err2 = glGetError();
+	
+	glEnable(GL_DEPTH_TEST);
+	int err3 = glGetError();
+	glDepthFunc(GL_LESS);
+	int err4 = glGetError();
+	glEnable(GL_CULL_FACE);
+	int err5 = glGetError();
+	glCullFace(GL_BACK);
+	int err6 = glGetError();
+
+	
 	//Game Loading
 	this->loaderKing = new Loader();
 
@@ -183,7 +197,8 @@ void LudumGame::MeshTest()
 
 	m.transform = glm::scale(m.transform, glm::vec3(100.0, 100.0, 100.0));
 
-	SDL_Surface* surface = IMG_Load("assets/snow-tile.jpg");
+	SDL_Surface* surface = SDL_LoadBMP("assets/test.bmp");
+	
 
 
 	// vertices
@@ -198,7 +213,7 @@ void LudumGame::MeshTest()
 	m.v.push_back(glm::vec3( 1.0, -1.0,  0.0));
 
 	// colors
-	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
+	m.c.push_back(glm::vec3( 0.0,  1.0,  0.0));
 	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
 	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
 	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
@@ -208,6 +223,13 @@ void LudumGame::MeshTest()
 	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
 	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
 	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
+
+	m.t.push_back(glm::vec2( 0.0,  0.0));
+	m.t.push_back(glm::vec2( 0.0,  1.0));
+	m.t.push_back(glm::vec2( 1.0,  0.0));
+	m.t.push_back(glm::vec2( 1.0,  1.0));
+
+	m.textureID = SDL_SurfaceToTexture(surface);
 
 	// elements
 	m.e.push_back(0);

@@ -18,16 +18,21 @@ void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir
 {
 	shader->Enable();
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glUniform1i(shader->Uniform("tex0"), GL_TEXTURE0);
+
 	glUniformMatrix4fv(shader->Uniform("model"), 1, GL_FALSE, glm::value_ptr(transform));
 	glUniformMatrix4fv(shader->Uniform("view"), 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(shader->Uniform("projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	
 
 	//glUniform3fv(shader->Uniform("dirLight0"), 1, glm::value_ptr(lightDir));
-
 
 	glEnableVertexAttribArray(position);
 	glEnableVertexAttribArray(color);
 	glEnableVertexAttribArray(normal);
+	glEnableVertexAttribArray(uv);
 
 	// vertices
 	GLuint vbo = -1;
@@ -71,6 +76,20 @@ void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir
 		(void*)0	// offset
 	);
 
+	// texture coords
+	GLuint vto = -1;
+	glGenBuffers(1, &vto);
+	glBindBuffer(GL_ARRAY_BUFFER, vto);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*t.size(), &(t[0]), GL_STATIC_DRAW);
+	glVertexAttribPointer(
+		uv,   // the location in shader
+		2,			// number of elements vec_2_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		0,			// stride
+		(void*)0	// offset
+	);
+
 	if(e.size() > 0)
 	{
 		GLuint veo = -1;
@@ -88,4 +107,5 @@ void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir
 	glDisableVertexAttribArray(position);
 	glDisableVertexAttribArray(color);
 	glDisableVertexAttribArray(normal);
+	glDisableVertexAttribArray(uv);
 }

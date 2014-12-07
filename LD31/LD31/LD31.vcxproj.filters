@@ -99,5 +99,8 @@
     <Image Include="assets\snow-tile.jpg">
       <Filter>assets</Filter>
     </Image>
+    <Image Include="assets\test.bmp">
+      <Filter>assets</Filter>
+    </Image>
   </ItemGroup>
 </Project>
