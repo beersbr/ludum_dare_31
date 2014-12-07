@@ -60,13 +60,10 @@ void LudumGame::Init()
 	
 	int err2 = glGetError();
 	
-	glEnable(GL_DEPTH_TEST);
-	int err3 = glGetError();
-	glDepthFunc(GL_LESS);
-	int err4 = glGetError();
-	glEnable(GL_CULL_FACE);
-	int err5 = glGetError();
-	glCullFace(GL_BACK);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.6);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	int err6 = glGetError();
@@ -87,6 +84,15 @@ void LudumGame::Init()
 
 	ShaderProgram::CreateShader("main", "main_vertex.glsl", "main_fragment.glsl");
 	m = MeshTest();
+	m->transform = glm::translate(m->transform, glm::vec3(-100.0, 0.0, 0.0));
+	m->transform = glm::scale(m->transform, glm::vec3(400, 400, 1));
+	m->transform = glm::rotate(m->transform, 90.0f, glm::vec3(0.0, 0.0, 1.0));
+
+	m2 = MeshTest("assets/snowman2-sprite.png");
+	m2->transform = glm::translate(m2->transform, glm::vec3(100.0, 0.0, 0.0));
+	m2->transform = glm::scale(m2->transform, glm::vec3(400.0, 400.0, 1.0));
+	m2->transform = glm::rotate(m2->transform, -90.0f, glm::vec3(0.0, 0.0, 1.0));
+
 }
 
 void LudumGame::Update(float dt)
@@ -111,6 +117,9 @@ void LudumGame::Render(float dt)
 
 	m->Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
 	m->t = m->animation[++m->frame%4];
+
+	m2->Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
+	m2->t = m2->animation[++m2->frame%4];
 
 	SDL_GL_SwapWindow(window);
 }
@@ -195,7 +204,7 @@ void LudumGame::Run()
 /*********************************************
 TEST FUNCTIONS
 **********************************************/
-Mesh* LudumGame::MeshTest()
+Mesh* LudumGame::MeshTest(std::string path)
 {
 	float hvw = static_cast<float>(ViewportWidth/2);
 	float hvh = static_cast<float>(ViewportHeight/2);
@@ -208,8 +217,8 @@ Mesh* LudumGame::MeshTest()
 		);
 
 	Mesh *m = new Mesh();
-	m->transform = glm::scale(m->transform, glm::vec3(80.0, 80.0, 1.0));
-	SDL_Surface* surface = IMG_Load("assets/snowman1-sprite.png");
+	/*m->transform = glm::scale(m->transform, glm::vec3(40.0, 40.0, 1.0));*/
+	SDL_Surface* surface = IMG_Load(path.c_str());
 
 	// vertices
 	/*

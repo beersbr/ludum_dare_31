@@ -16,5 +16,6 @@ public:
 private:
 	std::vector<Entity*> entities;
 	Loader* loaderKing;
+
 };
 
