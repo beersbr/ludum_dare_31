@@ -11,6 +11,10 @@ Loader::Loader()
 		{
 			fprintf(stdout, "\n[=] Successfully loaded assets\n");
 		}
+		else
+		{
+			throw std::exception("Failed to load assets");
+		}
 	}
 	catch(std::exception& ex)
 	{
@@ -37,7 +41,7 @@ Loader::Loader(std::string configPath)
 	}
 }
 
-std::string Loader::pullStringFromJSON(rapidjson::Document& doc, const char* value)
+std::string Loader::pullStringFromJSON(const rapidjson::Document& doc, const char* value)
 {
 	std::stringstream ss;
 
@@ -54,7 +58,7 @@ std::string Loader::pullStringFromJSON(rapidjson::Document& doc, const char* val
 	return doc[value].GetString();
 }
 
-std::map<std::string, std::string>* Loader::pullMapFromJSON(rapidjson::Value& doc)
+std::map<std::string, std::string>* Loader::pullMapFromJSON(const rapidjson::Value& doc)
 {
 	std::stringstream ss;
 	std::map<std::string, std::string>* tmpMap = new std::map<std::string, std::string>();
@@ -97,7 +101,7 @@ Configuration* Loader::parseConfiguration(std::string jsonStr)
 	}
 	try
 	{
-		tmpConfig->visualDataPath = pullStringFromJSON(configDoc, "visualData");
+		tmpConfig->visualDataPath = pullStringFromJSON(configDoc, "entityData");
 		tmpConfig->audioDataPath = pullStringFromJSON(configDoc, "audioData");
 		tmpConfig->mapDataPath = pullStringFromJSON(configDoc, "mapData");
 		if(configDoc.HasMember("options"))
@@ -119,33 +123,64 @@ Configuration* Loader::parseConfiguration(std::string jsonStr)
 	}
 }
 
-std::map<std::string, std::map<std::string, std::string>*>* Loader::parseComponentData(std::string jsonStr)
+void Loader::parseEntityData(std::string jsonStr)
 {
 	std::stringstream ss;
-	std::map<std::string, std::map<std::string, std::string>*>* tmpSuperMap = new std::map<std::string, std::map<std::string, std::string>*>();
+	//EntityMap* tmpSuperMap = new EntityMap();
 
 	rapidjson::Document compDoc;
 	if(compDoc.Parse<0>(jsonStr.c_str()).HasParseError())
 	{
 		fprintf(stdout, "[!] Error parsing JSON document into object!");
-		return NULL;
+		return;
 	}
 
 	//add component section for extendability
-	if(!compDoc.HasMember("components"))
+	if(!compDoc.HasMember("Entities"))
 	{
-		fprintf(stdout, "[!] No component member found in component json!");
-		return NULL;
+		fprintf(stdout, "[!] No entity member found in component json!");
+		return;
 	}
-	if(!compDoc["components"].IsObject())
+	if(!compDoc["Entities"].IsObject())
 	{
-		fprintf(stdout, "[!] Expected component member to be object, was something else");
-		return NULL;
+		fprintf(stdout, "[!] Expected entity member to be object, was something else");
+		return;
 	}
 
-	const rapidjson::Value& compObj = compDoc["components"];
-	//Each object element should be an object representing a component
-	for(rapidjson::Value::ConstMemberIterator itr = compObj.MemberBegin(); itr != compObj.MemberEnd(); itr++)
+	const rapidjson::Value& compObj = compDoc["Entities"];
+	//Each object element should be an object containing objects representing entities
+
+	if(!compObj.HasMember("Towers") || !compObj["Towers"].IsObject())
+	{
+		fprintf(stdout, "[!] Expected Towers object member in the Entities object");
+		return;
+	}
+	const rapidjson::Value& towerObj = compObj["Towers"];
+	this->TowerEntityData = pullEntityMapFromObject(towerObj);
+
+	if(!compObj.HasMember("Ammos") || !compObj["Ammos"].IsObject())
+	{
+		fprintf(stdout, "[!] Expected Ammos object member in the Entities object");
+		return;
+	}
+	const rapidjson::Value& ammObj = compObj["Ammos"];
+	this->AmmoEntityData = pullEntityMapFromObject(ammObj);
+
+	if(!compObj.HasMember("Monsters") || !compObj["Monsters"].IsObject())
+	{
+		fprintf(stdout, "[!] Expected Monsters object member in the Entities object");
+		return;
+	}
+	const rapidjson::Value& monObj = compObj["Monsters"];
+	this->EnemyEntityData = pullEntityMapFromObject(monObj);
+}
+
+EntityMap* Loader::pullEntityMapFromObject(const rapidjson::Value& doc)
+{
+	std::stringstream ss;
+	EntityMap* tmpSuperMap = new EntityMap();
+
+	for(rapidjson::Value::ConstMemberIterator itr = doc.MemberBegin(); itr != doc.MemberEnd(); itr++)
 	{
 		if(!itr->value.IsObject())
 		{
@@ -210,7 +245,14 @@ bool Loader::loadAssets()
 
 	//now we have the configuration asset path, parse that.
 	std::string componentJSON((*loadJSONStringFromFile(this->config->visualDataPath)));
-	this->componentData = parseComponentData(componentJSON);
+	this->parseEntityData(componentJSON);
+
+	if(!TowerEntityData || !AmmoEntityData || !EnemyEntityData)
+	{
+		fprintf(stdout, "[-] Something horrible during asset loading happened");
+		return false;
+	}
+
 	return true;
 	
 }

@@ -1,5 +1,5 @@
 {
- "visualData": "assets\\components.json",
+ "entityData": "assets\\entities.json",
  "audioData": "assets\\audio.json",
  "mapData": "assets\\map.json"
 }
