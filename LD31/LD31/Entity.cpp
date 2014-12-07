@@ -2,20 +2,18 @@
 
 #include "Component.h"
 
-Entity::Entity(World* world)
+Entity::Entity(std::vector<Entity*>* entities)
 {
-	this->myWorld = world;
-	this->entities = world->entities;
+	//this->myWorld = world;
+	this->entities = (entities);
 	this->pos = glm::vec3(0.0, 0.0, 0.0);
 	this->size = glm::vec3(0.0, 0.0, 0.0);
 	//components.clear();
 	//Entity::entities.push_back(this);
 }
 
-Entity::Entity(World* world, glm::vec3& pos, glm::vec3& size)
+Entity::Entity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size)
 {
-	//I DONT KNOW MY WORLD!?
-	this->myWorld = NULL;
 	this->entities = entities;
 	this->pos = pos;
 	this->size = size;

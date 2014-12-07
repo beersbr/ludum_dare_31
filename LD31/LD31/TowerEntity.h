@@ -4,13 +4,14 @@ class TowerEntity :
 	public Entity
 {
 public:
-	TowerEntity(World* world);
-	TowerEntity(World* world, glm::vec3& pos, glm::vec3& size);
+	TowerEntity(std::vector<Entity*>* entities);
+	TowerEntity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size);
 	~TowerEntity();
 	void setTarget(glm::vec3 targetLocation); //Do some magic to determine where you need to aim
 	void isValidTarget(Entity* target); //Check if valid target is around
 	void fire(); //create a bullet entity that will have a veclocity and target that this tower is currently set to
 				 //Will also handle effects
+	virtual void Update(float time);
 private:
 	//we already have a position and size, this will be a drawable entity (I guess they all are)
 	//What attributes do towers have?

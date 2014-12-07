@@ -7,14 +7,14 @@
 #include <glm.hpp>
 
 #include "Component.h"
-#include "World.h"
 
 class Entity
 {
 public:
-	Entity(World* world); //In case the entity must be aware of the world
-	Entity(World* world, glm::vec3& pos, glm::vec3& size);
+	Entity(std::vector<Entity*>* entities);
+	Entity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size);
 	~Entity(void);
+	virtual void Update(float time) = 0;
 
 	//bool HasComponent(std::string const family) const;
 	/*
@@ -30,9 +30,8 @@ public:
 public:
 	//std::map<std::string, Component*> components;
 	std::vector<Entity*>* entities; //reference to the world
-	World* myWorld;
 	glm::vec3 pos;
 	glm::vec3 size;
-	Uint32 surfaceID;
+	Uint32 assetId;
 	bool isDead;
 };

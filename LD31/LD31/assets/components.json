@@ -22,9 +22,11 @@
     "Ammos" : {
         "MachineGunBullet" : {
             "image" : "bullets.jpg",
+            "velocity" : "12"
             }
         "Flame": {
             "image" : "flame.jpg",
+            "velocity" : "4"
         }
     },
     "Monsters" : {
