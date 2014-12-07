@@ -2,25 +2,28 @@
 
 #include "Component.h"
 
-Entity::Entity(void)
+Entity::Entity(World* world)
 {
-	components.clear();
-	Entity::entities.push_back(this);
+	this->myWorld = world;
+	this->entities = world->entities;
+	this->pos = glm::vec3(0.0, 0.0, 0.0);
+	this->size = glm::vec3(0.0, 0.0, 0.0);
+	//components.clear();
+	//Entity::entities.push_back(this);
+}
+
+Entity::Entity(World* world, glm::vec3& pos, glm::vec3& size)
+{
+	//I DONT KNOW MY WORLD!?
+	this->myWorld = NULL;
+	this->entities = entities;
+	this->pos = pos;
+	this->size = size;
 }
 
 
 Entity::~Entity(void)
 {
-
+	//Whoa, we don't delete anything here yet..
 }
 
-bool Entity::HasComponent(std::string const family) const
-{
-	auto it = components.find(family);
-	return (it != components.end());
-}
-
-Component* Entity::GetComponent(std::string const family)
-{
-	return (components[family]);
-}
