@@ -106,7 +106,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>E:\Projects\ludum_dare_31\ThirdParty\SDL2_image\lib\x64;$(SolutionDir)../ThirdParty/SDL2-2.0.3/lib/x64;$(SolutionDir)../ThirdParty/glew-1.10.0/lib/Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\ThirdParty\SDL2_image\lib\x64;$(SolutionDir)../ThirdParty/SDL2-2.0.3/lib/x64;$(SolutionDir)../ThirdParty/glew-1.10.0/lib/Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2main.lib;SDL2.lib;opengl32.lib;glew32.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
