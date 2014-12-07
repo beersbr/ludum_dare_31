@@ -22,12 +22,12 @@ void LudumGame::Init()
 	ViewportWidth = 1200;
 	ViewportHeight = 800; 
 
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	//SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	//SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 	window = SDL_CreateWindow(WindowTitle.c_str(), 
@@ -63,11 +63,9 @@ void LudumGame::Init()
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LESS);
 	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.6);
+	glAlphaFunc(GL_GREATER, 0.6f);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	int err6 = glGetError();
-	
 	
 	//Game Loading
 	this->loaderKing = new Loader();
@@ -93,6 +91,9 @@ void LudumGame::Init()
 	m2->transform = glm::scale(m2->transform, glm::vec3(400.0, 400.0, 1.0));
 	m2->transform = glm::rotate(m2->transform, -90.0f, glm::vec3(0.0, 0.0, 1.0));
 
+
+	world = new World(nullptr);
+	world->createMap();
 }
 
 void LudumGame::Update(float dt)
@@ -115,11 +116,13 @@ void LudumGame::Render(float dt)
 		glm::vec3(0.0, 1.0, 0.0)
 		);
 
-	m->Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
-	m->t = m->animation[++m->frame%4];
+	world->RenderMap();
 
-	m2->Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
-	m2->t = m2->animation[++m2->frame%4];
+	//m->Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
+	//m->t = m->animation[++m->frame%4];
+
+	//m2->Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
+	//m2->t = m2->animation[++m2->frame%4];
 
 	SDL_GL_SwapWindow(window);
 }
@@ -186,15 +189,46 @@ void LudumGame::Run()
 {
 	Init();
 
+	unsigned int frames = 1;
+
+	unsigned int start = SDL_GetTicks();
+	unsigned int lastTime = start;
+	unsigned int time = start;
+
+	unsigned int timer = 0;
+
 	while(isRunning)
 	{
-		// TODO: Time stuff
+		unsigned int lastTime = time;
+		time = SDL_GetTicks();
+		unsigned int elapsedTime = time - lastTime;
+
+		float t = (time - start)/1000;
+		float FPS = frames/(std::max(t, 0.000001f));
+
+		if(FPS < 10.0f && SDL_GetTicks() - start > 10000)
+		{
+			fprintf(stdout, "WARNING: FPS DROPPING: %f\n", FPS);
+			//getchar();
+			break;
+		}
+
+		if(timer > 1000)
+		{
+			fprintf(stdout, "FPS: %f\n", FPS);
+			timer = 0;
+		}
+
 
 		float dt = 0.0f;
 
 		HandleEvents();
 		Update(dt);
 		Render(dt);
+
+		++frames;
+
+		timer += elapsedTime;
 	}
 
 	Cleanup();
@@ -232,7 +266,7 @@ Mesh* LudumGame::MeshTest(std::string path)
 	m->v.push_back(glm::vec3( 1.0, -1.0,  0.0));
 
 	// colors
-	m->c.push_back(glm::vec3( 0.0,  1.0,  0.0));
+	m->c.push_back(glm::vec3( 0.0,  0.0,  0.0));
 	m->c.push_back(glm::vec3( 0.0,  0.0,  0.0));
 	m->c.push_back(glm::vec3( 0.0,  0.0,  0.0));
 	m->c.push_back(glm::vec3( 0.0,  0.0,  0.0));

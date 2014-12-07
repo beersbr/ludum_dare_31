@@ -13,12 +13,14 @@
 
 #include "ShaderProgram.h"
 
+
 // these represent layout positions in the shader
 enum SHADER { 
 	position = 0,
 	color,
 	normal,
-	uv
+	uv,
+	model
 };
 
 class Mesh
@@ -28,7 +30,15 @@ public:
 	~Mesh(void);
 
 	void Render(glm::mat4 const projection, glm::mat4 const view, glm::vec3 const lightDir);
+	void PrepareRender();
 
+	static void Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgram* shader);
+
+	static std::vector<GLfloat> pv;
+	static std::vector<GLfloat> pc;
+	static std::vector<GLfloat> pn;
+	static std::vector<GLfloat> pt;
+	static std::vector<GLfloat> pm;
 public:
 	glm::mat4 transform;
 

@@ -3,6 +3,7 @@
 uniform sampler2D tex0;
 
 in vec2 UVc;
+in vec3 c;
 out vec4 finalFragColor;
 
 void main()
@@ -11,5 +12,6 @@ void main()
         discard;
     }
 
-	finalFragColor = texture2D(tex0, UVc);
+	vec3 colorMix = mix(c, texture2D(tex0, UVc).rgb, 1.0);
+	finalFragColor = vec4(colorMix, texture2D(tex0, UVc).a);
 }

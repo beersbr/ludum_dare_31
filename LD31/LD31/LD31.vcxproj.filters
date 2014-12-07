@@ -69,6 +69,9 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="TileEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -113,6 +116,9 @@
     <ClInclude Include="Entity.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="TileEntity.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="main_vertex.glsl" />
@@ -127,6 +133,93 @@
       <Filter>assets</Filter>
     </Image>
     <Image Include="assets\snowman1-sprite.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\base-left.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\blood-snow-1.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\blood-snow-2.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\fire-ground.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\flame-blast-tower.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\flame-turret.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ground-center.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ice-center.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ice-snow-bl.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ice-snow-bottom.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ice-snow-br.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ice-snow-l.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ice-snow-r.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ice-snow-t.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ice-snow-tl.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ice-snow-tr.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\projectile-tower.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow_corner_tl.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow-border-bottom.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow-border-l.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow-border-r.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow-border-top.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow-corner-bl.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow-corner-br.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow-corner-tr.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snowman_bruiser-sprite.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snowman2-sprite.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow-portal-l.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\snow-portal-t.jpg">
       <Filter>assets</Filter>
     </Image>
   </ItemGroup>

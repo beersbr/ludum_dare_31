@@ -11,6 +11,7 @@
 #include "Loader.h"
 #include "ShaderProgram.h"
 #include "Mesh.h"
+#include "World.h"
 
 class LudumGame
 {
@@ -26,7 +27,6 @@ public:
 	void Run();
 
 	// test 
-
 	Mesh *MeshTest(std::string path = "assets/snowman1-sprite.png");
 
 
@@ -41,6 +41,8 @@ public:
 
 	Mesh *m;
 	Mesh *m2;
+
+	World *world;
 
 private:
 	InputHandler inputKing;

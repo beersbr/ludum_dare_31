@@ -1,7 +1,7 @@
 #include "Util.h"
 
 GLuint SDL_SurfaceToTexture(SDL_Surface *surface) {
-    GLuint tid;
+    static GLuint tid = -1;
     GLenum texture_format;
     GLint ncolors;
     SDL_Surface* s = surface;
@@ -27,7 +27,8 @@ GLuint SDL_SurfaceToTexture(SDL_Surface *surface) {
     }
  
 	int err1 = glGetError();
-    glGenTextures(1, &tid);
+	if(tid < 0)
+		glGenTextures(1, &tid);
 
 	glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tid);

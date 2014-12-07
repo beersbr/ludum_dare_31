@@ -7,27 +7,18 @@
 #include <glm.hpp>
 
 #include "Component.h"
+#include "Mesh.h"
 
-enum ENTITY_TYPE{ Tower, Ammo, Enemy };
+enum ENTITY_TYPE{ Tower, Ammo, Enemy, Tile };
 
 class Entity
 {
 public:
+	Entity(glm::vec3 position, glm::vec3 size);
 	Entity(std::vector<Entity*>* entities);
 	Entity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size);
 	~Entity(void);
 	virtual void Update(float time) = 0;
-
-	//bool HasComponent(std::string const family) const;
-	/*
-	template <typename T>
-	T* TGetComponent()
-	{
-		return 
-	}
-	*/
-	//Component* GetComponent(std::string const family);
-
 
 public:
 	//std::map<std::string, Component*> components;
@@ -36,4 +27,6 @@ public:
 	glm::vec3 size;
 	Uint32 assetId;
 	bool isDead;
+
+	Mesh mesh;
 };

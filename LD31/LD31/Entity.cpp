@@ -2,6 +2,13 @@
 
 #include "Component.h"
 
+
+Entity::Entity(glm::vec3 position, glm::vec3 size)
+{
+	this->pos = position;
+	this->size = size;
+}
+
 Entity::Entity(std::vector<Entity*>* entities)
 {
 	//this->myWorld = world;
