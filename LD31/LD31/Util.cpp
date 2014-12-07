@@ -28,6 +28,8 @@ GLuint SDL_SurfaceToTexture(SDL_Surface *surface) {
  
 	int err1 = glGetError();
     glGenTextures(1, &tid);
+
+	glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tid);
 	glEnable(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

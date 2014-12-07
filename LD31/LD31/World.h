@@ -10,5 +10,7 @@ public:
 
 public:
 	std::vector<Entity*> entities;
+
+
 };
 
