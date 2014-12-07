@@ -1,0 +1,40 @@
+{ 
+"Components" : { 
+    "Towers": {
+        "GunTower" : {
+            "ammoType": "MachineGunBullet",
+            "image", "gunTower.jpg",
+            "health" : "10",
+            "damage" : "1", 
+            "shotSpeed" : "12",
+            "fireSound" : "guntowpow.wav"
+            },
+        "FlameTower" : {
+            "ammoType" : "Flame"
+            "image" : "flameTower.jpg"
+            "health" : "15",
+            "damage" : "4", 
+            "shotSpeed" : "4",
+            "fireSound" : "fire.wav"
+            },
+        },
+    },
+    "Ammos" : {
+        "MachineGunBullet" : {
+            "image" : "bullets.jpg",
+            "velocity" : "12"
+            }
+        "Flame": {
+            "image" : "flame.jpg",
+            "velocity" : "4"
+        }
+    },
+    "Monsters" : {
+        "Snowman" : {
+            "image" : "snowman.jpg",
+            "health" : "5",
+            "moveSpeed" : "5",
+            "atkSpeed" : "5",
+            }
+    }
+}

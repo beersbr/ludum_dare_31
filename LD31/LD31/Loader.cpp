@@ -4,7 +4,7 @@
 Loader::Loader()
 {
 	//Default constructor, load master config file from default location
-	this->configPath = "MasterConfig.json";
+	this->configPath = "assets\\MasterConfig.json";
 	try
 	{
 		if(this->loadAssets())
@@ -167,7 +167,7 @@ std::string* Loader::loadJSONStringFromFile(std::string path)
 	if(!ifstr.good())
 	{
 		std::stringstream ss;
-		ss << "We couldn't open config file: " << configPath;
+		ss << "We couldn't open config file: " << path;
 		throw std::exception(ss.str().c_str());
 	}
 	ifstr.seekg(0, std::ios::end);
