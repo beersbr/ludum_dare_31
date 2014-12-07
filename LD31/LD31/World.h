@@ -1,14 +1,20 @@
 #pragma once
 
-#include "Entity.h"
+#include "TowerEntity.h"
+#include "EnemyEntity.h"
+#include "Loader.h"
+#include "LudumGame.h"
 
 class World
 {
 public:
-	World(void);
+	World(Loader* loader);
 	~World(void);
+	bool createTowerEntity(std::string entityName);
+	bool createEnemyEntity(std::string entityName);
 
-public:
+private:
 	std::vector<Entity*> entities;
+	Loader* loaderKing;
 };
 

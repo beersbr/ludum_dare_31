@@ -8,6 +8,8 @@
 
 #include "Component.h"
 
+enum ENTITY_TYPE{ Tower, Ammo, Enemy };
+
 class Entity
 {
 public:

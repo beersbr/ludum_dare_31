@@ -4,8 +4,8 @@ class TowerEntity :
 	public Entity
 {
 public:
-	TowerEntity(std::vector<Entity*>* entities);
-	TowerEntity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size);
+	TowerEntity(std::vector<Entity*>* entities, std::map<std::string, std::string>* props);
+	TowerEntity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size, std::map<std::string, std::string>* props);
 	~TowerEntity();
 	void setTarget(glm::vec3 targetLocation); //Do some magic to determine where you need to aim
 	void isValidTarget(Entity* target); //Check if valid target is around
@@ -15,8 +15,9 @@ public:
 private:
 	//we already have a position and size, this will be a drawable entity (I guess they all are)
 	//What attributes do towers have?
-	Uint32 bulletType; //The tower will spawn bullet entities. Use the ID to get the correct info from the loader, or whoever
+	std::string bulletType; //The tower will spawn bullet entities. Use the ID to get the correct info from the loader, or whoever
 	Uint32 damage;
+	Uint32 health;
 	Uint32 shotSpeed;
 	glm::vec3 curDirection;
 

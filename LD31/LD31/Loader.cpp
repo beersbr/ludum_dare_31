@@ -256,3 +256,62 @@ bool Loader::loadAssets()
 	return true;
 	
 }
+
+std::map<std::string, std::string>* Loader::getEntity(std::string entName, ENTITY_TYPE ent)
+{
+	switch(ent)
+	{
+	case(ENTITY_TYPE::Tower):
+		{
+			if(!this->TowerEntityData->count(entName))
+			{
+				return NULL;
+			}
+			else
+			{
+				return (*TowerEntityData)[entName];
+			}
+		}
+	case(ENTITY_TYPE::Enemy):
+		{
+			if(!this->EnemyEntityData->count(entName))
+			{
+				return NULL;
+			}
+			else
+			{
+				return (*EnemyEntityData)[entName];
+			}
+		}
+	case(ENTITY_TYPE::Ammo):
+		{
+			if(!this->AmmoEntityData->count(entName))
+			{
+				return NULL;
+			}
+			else
+			{
+				return (*AmmoEntityData)[entName];
+			}
+		}
+	default:
+		{
+			return NULL;
+		}
+	}
+}
+
+std::map<std::string, std::string>* Loader::getTowerEntityProps(std::string entityName)
+{
+	return getEntity(entityName, ENTITY_TYPE::Tower);
+}
+
+std::map<std::string, std::string>* Loader::getEnemyEntityProps(std::string entityName)
+{
+	return getEntity(entityName, ENTITY_TYPE::Enemy);
+}
+
+std::map<std::string, std::string>* Loader::getAmmoEntityProps(std::string entityName)
+{
+	return getEntity(entityName, ENTITY_TYPE::Ammo);
+}

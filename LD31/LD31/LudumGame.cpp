@@ -38,7 +38,7 @@ void LudumGame::Init()
 		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
 	context = SDL_GL_CreateContext(window);
-
+	//glEnable(GL_TEXTURE_2D);
 	glewExperimental = GL_TRUE;
 	if(glewInit() != GLEW_OK)
 	{
@@ -70,7 +70,7 @@ void LudumGame::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	int err6 = glGetError();
-	glEnable(GL_TEXTURE_2D);
+	
 	
 	//Game Loading
 	this->loaderKing = new Loader();
