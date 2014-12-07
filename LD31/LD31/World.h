@@ -24,9 +24,9 @@ public:
 
 
 	bool createTileAtPos(glm::vec2 const pos);
-	bool createMap(/*std::vector<int> const tileDesc*/);	
 
-	void RenderMap();
+	bool createMap(SDL_Renderer* r);	
+	void RenderMap(SDL_Renderer* r);
 
 private:
 	std::vector<Entity*> entities;
@@ -39,6 +39,10 @@ private:
 	glm::vec2 getPos(int index);
 
 	GLuint tilesVBO;
+
+	SDL_Surface* surface;
+	SDL_Texture* texture;
+
 
 };
 

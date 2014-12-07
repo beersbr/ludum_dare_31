@@ -49,5 +49,7 @@ private:
 	Loader* loaderKing;
 
 	GLuint VAO; // vertex array object :: OpenGL
+
+	SDL_Renderer* renderer;
 };
 

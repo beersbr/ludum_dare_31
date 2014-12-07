@@ -50,7 +50,7 @@ void LudumGame::Init()
 	// so that we can load jpgs
 	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
-	SDL_GL_SetSwapInterval(1);
+	//SDL_GL_SetSwapInterval(1);
 
 	// initialize OpenGL
 	//glEnable(GL_TEXTURE_2D_ARRAY);
@@ -91,9 +91,9 @@ void LudumGame::Init()
 	m2->transform = glm::scale(m2->transform, glm::vec3(400.0, 400.0, 1.0));
 	m2->transform = glm::rotate(m2->transform, -90.0f, glm::vec3(0.0, 0.0, 1.0));
 
-
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	world = new World(nullptr);
-	world->createMap();
+	world->createMap(renderer);
 }
 
 void LudumGame::Update(float dt)
@@ -103,28 +103,15 @@ void LudumGame::Update(float dt)
 
 void LudumGame::Render(float dt)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.3f, 0.0f, 0.3f, 1.0f);
+	/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.3f, 0.0f, 0.3f, 1.0f);*/
 
 	float hvw = static_cast<float>(ViewportWidth/2);
 	float hvh = static_cast<float>(ViewportHeight/2);
 
-	glm::mat4 Projection = glm::ortho(-hvw, hvw, -hvh, hvh, 500.0f, -500.0f);
-	glm::mat4 View = glm::lookAt(
-		glm::vec3(0.0, 0.0, 500.0),
-		glm::vec3(0.0, 0.0, 0.0),
-		glm::vec3(0.0, 1.0, 0.0)
-		);
-
-	world->RenderMap();
-
-	//m->Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
-	//m->t = m->animation[++m->frame%4];
-
-	//m2->Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
-	//m2->t = m2->animation[++m2->frame%4];
-
-	SDL_GL_SwapWindow(window);
+	SDL_RenderClear(renderer);
+	world->RenderMap(renderer);
+	SDL_RenderPresent(renderer);
 }
 
 void LudumGame::Cleanup()
@@ -218,7 +205,6 @@ void LudumGame::Run()
 			fprintf(stdout, "FPS: %f\n", FPS);
 			timer = 0;
 		}
-
 
 		float dt = 0.0f;
 
