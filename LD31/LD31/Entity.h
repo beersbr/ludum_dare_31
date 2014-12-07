@@ -28,5 +28,6 @@ public:
 	Uint32 assetId;
 	bool isDead;
 
-	Mesh mesh;
+	SDL_Surface* surface;
+	//Mesh mesh;
 };

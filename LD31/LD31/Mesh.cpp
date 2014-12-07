@@ -6,7 +6,108 @@ std::vector<GLfloat> Mesh::pn;
 std::vector<GLfloat> Mesh::pt;
 std::vector<GLfloat> Mesh::pm;
 
-void Mesh::Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgram* shader)
+GLuint Mesh::RenderBuffer(GLuint vbo)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+	glEnableVertexAttribArray(position);
+	glEnableVertexAttribArray(color);
+	glEnableVertexAttribArray(normal);
+	glEnableVertexAttribArray(uv);
+	glEnableVertexAttribArray(model);
+	glEnableVertexAttribArray(model+1);
+	glEnableVertexAttribArray(model+2);
+	glEnableVertexAttribArray(model+3);
+
+	glVertexAttribPointer(
+		position,   // the location in shader
+		3,			// number of elements vec_3_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		0,			// stride
+		(void*)0	// offset
+	);
+
+	glVertexAttribPointer(
+		color,   // the location in shader
+		3,			// number of elements vec_3_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		0,			// stride
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3))	// offset
+	);
+
+	glVertexAttribPointer(
+		normal,   // the location in shader
+		3,			// number of elements vec_3_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		0,			// stride
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3))	// offset
+	);
+
+	glVertexAttribPointer(
+		uv,   // the location in shader
+		3,			// number of elements vec_3_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		0,			// stride
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3))	// offset
+	);
+
+	glVertexAttribPointer(
+		model,   // the location in shader
+		4,			// number of elements vec_3_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		sizeof(GLfloat) * 4 * 4,			// stride
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2))	// offset
+	);
+
+	glVertexAttribPointer(
+		model+1,   
+		4,			
+		GL_FLOAT,	
+		GL_FALSE,	
+		sizeof(GLfloat) * 4 * 4,			
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2)+(sizeof(GLfloat) * 4))	
+	);
+
+	glVertexAttribPointer(
+		model+2,  
+		4,			
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(GLfloat) * 4 * 4,			
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2)+(sizeof(GLfloat) * 8))	
+	);
+
+	glVertexAttribPointer(
+		model+3,   
+		4,			
+		GL_FLOAT,	
+		GL_FALSE,	
+		sizeof(GLfloat) * 4 * 4,			
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2)+(sizeof(GLfloat) * 12))	
+	);
+
+	glDrawArrays(GL_TRIANGLES, 0,  static_cast<GLsizei>(Mesh::pv.size()));
+
+	glDisableVertexAttribArray(position);
+	glDisableVertexAttribArray(color);
+	glDisableVertexAttribArray(normal);
+	glDisableVertexAttribArray(uv);
+	glDisableVertexAttribArray(model);
+	glDisableVertexAttribArray(model+1);
+	glDisableVertexAttribArray(model+2);
+	glDisableVertexAttribArray(model+3);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	return vbo;
+}
+
+GLuint Mesh::Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgram* shader)
 {
 	shader->Enable();
 
@@ -23,7 +124,7 @@ void Mesh::Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgra
 	sz += Mesh::pc.size()*sizeof(glm::vec3);
 	sz += Mesh::pn.size()*sizeof(glm::vec3);
 	sz += Mesh::pt.size()*sizeof(glm::vec2);
-	//sz += Mesh::pm.size()*sizeof(glm::mat4);
+	sz += Mesh::pm.size()*sizeof(glm::mat4);
 
 	struct b_data{
 	public:
@@ -31,7 +132,7 @@ void Mesh::Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgra
 		std::vector<GLfloat> _c;
 		std::vector<GLfloat> _n;
 		std::vector<GLfloat> _t;
-		//std::vector<GLfloat> _m;
+		std::vector<GLfloat> _m;
 	};
 
 	typedef b_data BData;
@@ -41,7 +142,7 @@ void Mesh::Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgra
 	buffer._c = pc;
 	buffer._n = pn;
 	buffer._t = pt;
-	//buffer._m = pm;
+	buffer._m = pm;
 
 	//std::vector<GLfloat> buffer;
 	//buffer.resize(szElements);
@@ -50,8 +151,6 @@ void Mesh::Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgra
 	//buffer.insert(buffer.end(), Mesh::pn.begin(), Mesh::pn.end());
 	//buffer.insert(buffer.end(), Mesh::pt.begin(), Mesh::pt.end());
 	//buffer.insert(buffer.end(), Mesh::pm.begin(), Mesh::pm.end());
-
-
 
 	glEnableVertexAttribArray(position);
 	glEnableVertexAttribArray(color);
@@ -103,41 +202,41 @@ void Mesh::Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgra
 		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3))	// offset
 	);
 
-	//glVertexAttribPointer(
-	//	model,   // the location in shader
-	//	4,			// number of elements vec_3_
-	//	GL_FLOAT,	// type of data
-	//	GL_FALSE,	// normalized?
-	//	sizeof(GLfloat) * 4 * 4,			// stride
-	//	(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2))	// offset
-	//);
+	glVertexAttribPointer(
+		model,   // the location in shader
+		4,			// number of elements vec_3_
+		GL_FLOAT,	// type of data
+		GL_FALSE,	// normalized?
+		sizeof(GLfloat) * 4 * 4,			// stride
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2))	// offset
+	);
 
-	//glVertexAttribPointer(
-	//	model+1,   
-	//	4,			
-	//	GL_FLOAT,	
-	//	GL_FALSE,	
-	//	sizeof(GLfloat) * 4 * 4,			
-	//	(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2)+(sizeof(GLfloat) * 4))	
-	//);
+	glVertexAttribPointer(
+		model+1,   
+		4,			
+		GL_FLOAT,	
+		GL_FALSE,	
+		sizeof(GLfloat) * 4 * 4,			
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2)+(sizeof(GLfloat) * 4))	
+	);
 
-	//glVertexAttribPointer(
-	//	model+2,  
-	//	4,			
-	//	GL_FLOAT,
-	//	GL_FALSE,
-	//	sizeof(GLfloat) * 4 * 4,			
-	//	(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2)+(sizeof(GLfloat) * 8))	
-	//);
+	glVertexAttribPointer(
+		model+2,  
+		4,			
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(GLfloat) * 4 * 4,			
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2)+(sizeof(GLfloat) * 8))	
+	);
 
-	//glVertexAttribPointer(
-	//	model+3,   
-	//	4,			
-	//	GL_FLOAT,	
-	//	GL_FALSE,	
-	//	sizeof(GLfloat) * 4 * 4,			
-	//	(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2)+(sizeof(GLfloat) * 12))	
-	//);
+	glVertexAttribPointer(
+		model+3,   
+		4,			
+		GL_FLOAT,	
+		GL_FALSE,	
+		sizeof(GLfloat) * 4 * 4,			
+		(void*)(Mesh::pv.size()*sizeof(glm::vec3)+Mesh::pc.size()*sizeof(glm::vec3)+Mesh::pn.size()*sizeof(glm::vec3)+Mesh::pt.size()*sizeof(glm::vec2)+(sizeof(GLfloat) * 12))	
+	);
 
 	glDrawArrays(GL_TRIANGLES, 0,  static_cast<GLsizei>(Mesh::pv.size()));
 
@@ -151,6 +250,8 @@ void Mesh::Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgra
 	glDisableVertexAttribArray(model+1);
 	glDisableVertexAttribArray(model+2);
 	glDisableVertexAttribArray(model+3);
+
+	return vbo;
 }
 
 Mesh::Mesh(void)
@@ -159,7 +260,25 @@ Mesh::Mesh(void)
 	renderMethod = GL_TRIANGLES;
 
 	shader = ShaderProgram::shaders["main"];
+	VBO = 0;
+	VEO = 0;
 }
+
+Mesh::Mesh(Mesh& m)
+{
+	VBO = m.VBO;
+	VEO = m.VEO;
+	shader = m.shader;
+	textureID = m.textureID;
+
+	v = m.v;
+	c = m.c;
+	n = m.n;
+	t = m.t;
+	e = m.e;
+
+}
+
 
 Mesh::~Mesh(void)
 {
@@ -211,33 +330,41 @@ void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir
 	glEnableVertexAttribArray(color);
 	glEnableVertexAttribArray(normal);
 	glEnableVertexAttribArray(uv);
-	glEnableVertexAttribArray(model);
-
-	// get total size of buffer
-	int sz = sizeof(glm::vec3)*v.size();
-	sz += sizeof(glm::vec3)*c.size();
-	sz += sizeof(glm::vec3)*n.size();
-	sz += sizeof(glm::vec2)*t.size();
-
-	std::vector<float> buffer;
-	
-	for(auto i = v.begin(); i != v.end(); ++i)
-		buffer.push_back((*i).x), buffer.push_back((*i).y), buffer.push_back((*i).z);
-
-	for(auto i = c.begin(); i != c.end(); ++i)
-		buffer.push_back((*i).x), buffer.push_back((*i).y), buffer.push_back((*i).z);
-
-	for(auto i = n.begin(); i != n.end(); ++i)
-		buffer.push_back((*i).x), buffer.push_back((*i).y), buffer.push_back((*i).z);
-
-	for(auto i = t.begin(); i != t.end(); ++i)
-		buffer.push_back((*i).x), buffer.push_back((*i).y);
+	//glEnableVertexAttribArray(model);
 
 	// vertices
-	GLuint vbo = -1;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*buffer.size(), &(buffer[0]), GL_STATIC_DRAW);
+
+	if(VBO == 0)
+	{
+		// get total size of buffer
+		int sz = sizeof(glm::vec3)*v.size();
+		sz += sizeof(glm::vec3)*c.size();
+		sz += sizeof(glm::vec3)*n.size();
+		sz += sizeof(glm::vec2)*t.size();
+
+		std::vector<float> buffer;
+	
+		for(auto i = v.begin(); i != v.end(); ++i)
+			buffer.push_back((*i).x), buffer.push_back((*i).y), buffer.push_back((*i).z);
+
+		for(auto i = c.begin(); i != c.end(); ++i)
+			buffer.push_back((*i).x), buffer.push_back((*i).y), buffer.push_back((*i).z);
+
+		for(auto i = n.begin(); i != n.end(); ++i)
+			buffer.push_back((*i).x), buffer.push_back((*i).y), buffer.push_back((*i).z);
+
+		for(auto i = t.begin(); i != t.end(); ++i)
+			buffer.push_back((*i).x), buffer.push_back((*i).y);
+
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sz, &(buffer[0]), GL_STATIC_DRAW);
+	}
+	else
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	}
+
 	glVertexAttribPointer(
 		position,   // the location in shader
 		3,			// number of elements vec_3_
@@ -291,10 +418,17 @@ void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir
 
 	if(e.size() > 0)
 	{
-		GLuint veo = -1;
-		glGenBuffers(1, &veo);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, veo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*e.size(), &(e[0]), GL_STATIC_DRAW);
+		if(VEO == 0)
+		{
+			glGenBuffers(1, &VEO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VEO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*e.size(), &(e[0]), GL_STATIC_DRAW);
+			
+		}
+		else
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VEO);
+		}
 
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(e.size()), GL_UNSIGNED_BYTE, 0);
 	}
@@ -307,5 +441,5 @@ void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir
 	glDisableVertexAttribArray(color);
 	glDisableVertexAttribArray(normal);
 	glDisableVertexAttribArray(uv);
-	glDisableVertexAttribArray(model);
+	//glDisableVertexAttribArray(model);
 }

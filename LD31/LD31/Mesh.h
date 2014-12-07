@@ -13,7 +13,6 @@
 
 #include "ShaderProgram.h"
 
-
 // these represent layout positions in the shader
 enum SHADER { 
 	position = 0,
@@ -27,12 +26,14 @@ class Mesh
 {
 public:
 	Mesh(void);
+	Mesh::Mesh(Mesh& m);
 	~Mesh(void);
 
 	void Render(glm::mat4 const projection, glm::mat4 const view, glm::vec3 const lightDir);
 	void PrepareRender();
 
-	static void Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgram* shader);
+	static GLuint RenderBuffer(GLuint vbo);
+	static GLuint Render(glm::mat4 const projection, glm::mat4 const view, ShaderProgram* shader);
 
 	static std::vector<GLfloat> pv;
 	static std::vector<GLfloat> pc;
@@ -56,5 +57,9 @@ public:
 	GLuint textureID;
 
 	ShaderProgram *shader;
+
+private:
+	GLuint VBO;
+	GLuint VEO;
 };
 

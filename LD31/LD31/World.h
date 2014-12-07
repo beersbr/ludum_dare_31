@@ -37,5 +37,8 @@ private:
 private:
 	//int getPos(int x, int y);
 	glm::vec2 getPos(int index);
+
+	GLuint tilesVBO;
+
 };
 

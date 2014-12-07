@@ -112,7 +112,22 @@ bool World::createMap(/*std::vector<int> const tileDesc*/)
 		tile->mesh.e.push_back(3);
 
 		tiles.push_back(tile);
+
+		//Mesh m = tile->mesh;
+		//glm::vec3 pos = tile->pos;
+		//m.transform = glm::translate(m.transform, glm::vec3(pos.x, pos.y, 1.0));
+		//m.transform = glm::scale(m.transform, glm::vec3(40.0, 40.0, 1.0));
+		//m.PrepareRender();
 	}
+
+	//glm::mat4 Projection = glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, 500.0f, -500.0f);
+	//glm::mat4 View = glm::lookAt(
+	//	glm::vec3(0.0, 0.0, 500.0),
+	//	glm::vec3(0.0, 0.0, 0.0),
+	//	glm::vec3(0.0, 1.0, 0.0)
+	//	);
+
+	//tilesVBO = Mesh::Render(Projection, View, ShaderProgram::shaders["main"]);
 
 	return false;
 }
@@ -136,17 +151,27 @@ void World::RenderMap()
 		glm::vec3(0.0, 1.0, 0.0)
 		);
 
-	//for(auto it = tiles.begin(); it != tiles.end(); ++it)
-	//{
-	//	//Mesh m = (*it)->mesh;
-	//	//glm::vec3 pos = (*it)->pos;
-	//	//m.transform = glm::translate(m.transform, glm::vec3(pos.x, pos.y, 1.0));
-	//	//m.transform = glm::scale(m.transform, glm::vec3(40.0, 40.0, 1.0));
-	//	//m.PrepareRender();
-	//}
+	for(auto it = tiles.begin(); it != tiles.end(); ++it)
+	{
+		Mesh m = (*it)->mesh;
+		glm::vec3 pos = (*it)->pos;
+		m.transform = glm::translate(m.transform, glm::vec3(pos.x, pos.y, 1.0));
+		m.transform = glm::scale(m.transform, glm::vec3(40.0, 40.0, 1.0));
+		//m.PrepareRender();
+		m.Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
+	}
 
-	for(int i = 0; i < tiles.size(); i++)
+	/*for(int i = 0; i < tiles.size(); i++)
+	{
 		Mesh m = tiles[i]->mesh;
+		glm::vec3 pos = tiles[i]->pos;
+		m.transform = glm::translate(m.transform, glm::vec3(pos.x, pos.y, 1.0));
+		m.transform = glm::scale(m.transform, glm::vec3(40.0, 40.0, 1.0));
+		m.PrepareRender();
+	}
+*/
+
+	//Mesh::RenderBuffer(tilesVBO);
 
 	//Mesh::Render(Projection, View, ShaderProgram::shaders["main"]);
 }
