@@ -35,6 +35,9 @@ void LudumGame::Init()
 
 	context = SDL_GL_CreateContext(window);
 
+	// so that we can load jpgs
+	IMG_Init(IMG_INIT_JPG);
+
 	SDL_GL_SetSwapInterval(1);
 
 	// initialize OpenGL
@@ -85,7 +88,9 @@ void LudumGame::Render(float dt)
 }
 
 void LudumGame::Cleanup()
-{}
+{
+	IMG_Quit();
+}
 
 void LudumGame::HandleEvents()
 {
@@ -177,6 +182,9 @@ void LudumGame::MeshTest()
 	Mesh m;
 
 	m.transform = glm::scale(m.transform, glm::vec3(100.0, 100.0, 100.0));
+
+	SDL_Surface* surface = IMG_Load("assets/snow-tile.jpg");
+
 
 	// vertices
 	/*

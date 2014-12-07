@@ -176,6 +176,9 @@
     <None Include="main_vertex.glsl" />
     <None Include="MasterConfig.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\snow-tile.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

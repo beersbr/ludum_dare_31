@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{e92a7626-3b50-4728-b115-e1e91a8d2c3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -91,5 +94,10 @@
     <None Include="main_vertex.glsl" />
     <None Include="main_fragment.glsl" />
     <None Include="MasterConfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\snow-tile.jpg">
+      <Filter>assets</Filter>
+    </Image>
   </ItemGroup>
 </Project>
