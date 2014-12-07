@@ -93,7 +93,6 @@
   <ItemGroup>
     <None Include="main_vertex.glsl" />
     <None Include="main_fragment.glsl" />
-    <None Include="MasterConfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\snow-tile.jpg">

@@ -101,7 +101,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Projects\ludum_dare_31\ThirdParty\SDL2_image\include;$(SolutionDir)../ThirdParty\SDL2-2.0.3\include;$(SolutionDir)../ThirdParty/glew-1.10.0\include;$(SolutionDir)../ThirdParty/glm-0.9.4.0\glm;$(SolutionDir)../ThirdParty/rapidjson-0.1\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Projects\ludum_dare_31\ThirdParty\SDL2_image\include;$(SolutionDir)../ThirdParty\SDL2-2.0.3\include;$(SolutionDir)../ThirdParty/glew-1.10.0\include;$(SolutionDir)../ThirdParty/glm-0.9.4.0\glm;$(SolutionDir)../ThirdParty/rapidjson-0.1\rapidjson\include;$(SolutionDir)..\ThirdParty\SDL2_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -174,7 +174,6 @@
   <ItemGroup>
     <None Include="main_fragment.glsl" />
     <None Include="main_vertex.glsl" />
-    <None Include="MasterConfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\snow-tile.jpg" />
