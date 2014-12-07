@@ -18,6 +18,7 @@ void Mesh::Render(glm::mat4 projection, glm::mat4 view, glm::vec3 const lightDir
 {
 	shader->Enable();
 
+	glBindTexture(GL_TEXTURE_2D, textureID);
 	glUniform1i(shader->Uniform("tex0"), 0);
 
 	glUniformMatrix4fv(shader->Uniform("model"), 1, GL_FALSE, glm::value_ptr(transform));

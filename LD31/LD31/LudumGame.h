@@ -27,7 +27,7 @@ public:
 
 	// test 
 
-	Mesh *MeshTest();
+	Mesh *MeshTest(std::string path = "assets/snowman1-sprite.png");
 
 
 public:
@@ -40,6 +40,7 @@ public:
 	bool isRunning;
 
 	Mesh *m;
+	Mesh *m2;
 
 private:
 	InputHandler inputKing;

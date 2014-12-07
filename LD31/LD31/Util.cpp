@@ -44,5 +44,6 @@ GLuint SDL_SurfaceToTexture(SDL_Surface *surface) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, s->w, s->h, 0,
             texture_format, GL_UNSIGNED_BYTE, s->pixels);
  
+	glBindTexture(GL_TEXTURE_2D, 0);
     return tid;
 } 
