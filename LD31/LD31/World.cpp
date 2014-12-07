@@ -145,8 +145,8 @@ void World::RenderMap()
 	//	//m.PrepareRender();
 	//}
 
-	/*for(int i = 0; i < tiles.size(); i++)
-		Mesh m = tiles[i]->mesh*/;
+	for(int i = 0; i < tiles.size(); i++)
+		Mesh m = tiles[i]->mesh;
 
 	//Mesh::Render(Projection, View, ShaderProgram::shaders["main"]);
 }
