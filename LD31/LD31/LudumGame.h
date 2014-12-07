@@ -27,7 +27,8 @@ public:
 
 	// test 
 
-	void MeshTest();
+	Mesh *MeshTest();
+
 
 public:
 	std::string WindowTitle;
@@ -37,6 +38,8 @@ public:
 	SDL_Window* window;
 	SDL_GLContext context;
 	bool isRunning;
+
+	Mesh *m;
 
 private:
 	InputHandler inputKing;

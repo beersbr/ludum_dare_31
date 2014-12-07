@@ -48,7 +48,7 @@ void LudumGame::Init()
 	}
 
 	// so that we can load jpgs
-	IMG_Init(IMG_INIT_JPG);
+	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
 	SDL_GL_SetSwapInterval(1);
 
@@ -67,6 +67,8 @@ void LudumGame::Init()
 	glEnable(GL_CULL_FACE);
 	int err5 = glGetError();
 	glCullFace(GL_BACK);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	int err6 = glGetError();
 
 	
@@ -84,6 +86,7 @@ void LudumGame::Init()
 	glBindVertexArray(VAO);
 
 	ShaderProgram::CreateShader("main", "main_vertex.glsl", "main_fragment.glsl");
+	m = MeshTest();
 }
 
 void LudumGame::Update(float dt)
@@ -96,7 +99,18 @@ void LudumGame::Render(float dt)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.3f, 0.0f, 0.3f, 1.0f);
 
-	MeshTest();
+	float hvw = static_cast<float>(ViewportWidth/2);
+	float hvh = static_cast<float>(ViewportHeight/2);
+
+	glm::mat4 Projection = glm::ortho(-hvw, hvw, -hvh, hvh, 500.0f, -500.0f);
+	glm::mat4 View = glm::lookAt(
+		glm::vec3(0.0, 0.0, 500.0),
+		glm::vec3(0.0, 0.0, 0.0),
+		glm::vec3(0.0, 1.0, 0.0)
+		);
+
+	m->Render(Projection, View, glm::vec3(0.0, 0.0, 0.0));
+	m->t = m->animation[++m->frame%4];
 
 	SDL_GL_SwapWindow(window);
 }
@@ -181,7 +195,7 @@ void LudumGame::Run()
 /*********************************************
 TEST FUNCTIONS
 **********************************************/
-void LudumGame::MeshTest()
+Mesh* LudumGame::MeshTest()
 {
 	float hvw = static_cast<float>(ViewportWidth/2);
 	float hvh = static_cast<float>(ViewportHeight/2);
@@ -193,13 +207,9 @@ void LudumGame::MeshTest()
 		glm::vec3(0.0, 1.0, 0.0)
 		);
 
-	Mesh m;
-
-	m.transform = glm::scale(m.transform, glm::vec3(100.0, 100.0, 100.0));
-
-	SDL_Surface* surface = SDL_LoadBMP("assets/test.bmp");
-	
-
+	Mesh *m = new Mesh();
+	m->transform = glm::scale(m->transform, glm::vec3(80.0, 80.0, 1.0));
+	SDL_Surface* surface = IMG_Load("assets/snowman1-sprite.png");
 
 	// vertices
 	/*
@@ -207,37 +217,66 @@ void LudumGame::MeshTest()
 		|    |
 		1 -- 3
 	*/
-	m.v.push_back(glm::vec3(-1.0,  1.0,  0.0));
-	m.v.push_back(glm::vec3(-1.0, -1.0,  0.0));
-	m.v.push_back(glm::vec3( 1.0,  1.0,  0.0));
-	m.v.push_back(glm::vec3( 1.0, -1.0,  0.0));
+	m->v.push_back(glm::vec3(-1.0,  1.0,  0.0));
+	m->v.push_back(glm::vec3(-1.0, -1.0,  0.0));
+	m->v.push_back(glm::vec3( 1.0,  1.0,  0.0));
+	m->v.push_back(glm::vec3( 1.0, -1.0,  0.0));
 
 	// colors
-	m.c.push_back(glm::vec3( 0.0,  1.0,  0.0));
-	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
-	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
-	m.c.push_back(glm::vec3( 0.0,  0.0,  0.0));
+	m->c.push_back(glm::vec3( 0.0,  1.0,  0.0));
+	m->c.push_back(glm::vec3( 0.0,  0.0,  0.0));
+	m->c.push_back(glm::vec3( 0.0,  0.0,  0.0));
+	m->c.push_back(glm::vec3( 0.0,  0.0,  0.0));
 
 	// normals
-	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
-	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
-	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
-	m.n.push_back(glm::vec3( 0.0,  0.0,  1.0));
+	m->n.push_back(glm::vec3( 0.0,  0.0,  1.0));
+	m->n.push_back(glm::vec3( 0.0,  0.0,  1.0));
+	m->n.push_back(glm::vec3( 0.0,  0.0,  1.0));
+	m->n.push_back(glm::vec3( 0.0,  0.0,  1.0));
 
-	m.t.push_back(glm::vec2( 0.0,  0.0));
-	m.t.push_back(glm::vec2( 0.0,  1.0));
-	m.t.push_back(glm::vec2( 1.0,  0.0));
-	m.t.push_back(glm::vec2( 1.0,  1.0));
 
-	m.textureID = SDL_SurfaceToTexture(surface);
+	// frames
+	std::vector<glm::vec2> frame1;
+	frame1.push_back(glm::vec2( 0.0,  0.0));
+	frame1.push_back(glm::vec2( 0.0,  0.5));
+	frame1.push_back(glm::vec2( 0.25,  0.0));
+	frame1.push_back(glm::vec2( 0.25,  0.5));
+
+	std::vector<glm::vec2> frame2;
+	frame2.push_back(glm::vec2( 0.25,  0.0));
+	frame2.push_back(glm::vec2( 0.25,  0.5));
+	frame2.push_back(glm::vec2( 0.50,  0.0));
+	frame2.push_back(glm::vec2( 0.50,  0.5));
+
+	std::vector<glm::vec2> frame3;
+	frame3.push_back(glm::vec2( 0.50,  0.0));
+	frame3.push_back(glm::vec2( 0.50,  0.5));
+	frame3.push_back(glm::vec2( 0.75,  0.0));
+	frame3.push_back(glm::vec2( 0.75,  0.5));
+
+	std::vector<glm::vec2> frame4;
+	frame4.push_back(glm::vec2( 0.75,  0.0));
+	frame4.push_back(glm::vec2( 0.75,  0.5));
+	frame4.push_back(glm::vec2( 1.0,  0.0));
+	frame4.push_back(glm::vec2( 1.0,  0.5));
+
+	m->animation.push_back(frame1);
+	m->animation.push_back(frame2);
+	m->animation.push_back(frame3);
+	m->animation.push_back(frame4);
+
+	m->frame = 0;
+	m->t = m->animation[m->frame];
+
+	m->textureID = SDL_SurfaceToTexture(surface);
 
 	// elements
-	m.e.push_back(0);
-	m.e.push_back(1);
-	m.e.push_back(2);
-	m.e.push_back(2);
-	m.e.push_back(1);
-	m.e.push_back(3);
+	m->e.push_back(0);
+	m->e.push_back(1);
+	m->e.push_back(2);
+	m->e.push_back(2);
+	m->e.push_back(1);
+	m->e.push_back(3);
 
-	m.Render(Projection, View, glm::vec3(1.0, 1.0, 1.0));
+	return m;
 }

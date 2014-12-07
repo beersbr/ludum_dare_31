@@ -36,6 +36,8 @@ public:
 	std::vector<glm::vec3> c; // colors
 	std::vector<glm::vec3> n; // normals
 	std::vector<glm::vec2> t; // texutre coords
+	std::vector<std::vector<glm::vec2> > animation;
+	unsigned int frame;
 
 	std::vector<GLubyte>   e; // elements
 
