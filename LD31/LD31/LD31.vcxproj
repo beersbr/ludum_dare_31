@@ -101,12 +101,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Projects\ludum_dare_31\ThirdParty\SDL2_image\include;$(SolutionDir)../ThirdParty\SDL2-2.0.3\include;$(SolutionDir)../ThirdParty/glew-1.10.0\include;$(SolutionDir)../ThirdParty/glm-0.9.4.0\glm;$(SolutionDir)../ThirdParty/rapidjson-0.1\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Projects\ludum_dare_31\ThirdParty\SDL2_image\include;$(SolutionDir)../ThirdParty\SDL2-2.0.3\include;$(SolutionDir)../ThirdParty/glew-1.10.0\include;$(SolutionDir)../ThirdParty/glm-0.9.4.0\glm;$(SolutionDir)../ThirdParty/rapidjson-0.1\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Projects\ludum_dare_31\ThirdParty\SDL2_image\lib\x64;$(SolutionDir)../ThirdParty/SDL2-2.0.3/lib/x64;$(SolutionDir)../ThirdParty/glew-1.10.0/lib/Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Projects\ludum_dare_31\ThirdParty\SDL2_image\lib\x64;$(SolutionDir)../ThirdParty/SDL2-2.0.3/lib/x64;$(SolutionDir)../ThirdParty/glew-1.10.0/lib/Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2main.lib;SDL2.lib;opengl32.lib;glew32.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
