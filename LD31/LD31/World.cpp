@@ -78,6 +78,12 @@ bool World::CreateMap(SDL_Renderer* r)
 		dstRect.x = x * 40;
 		dstRect.y = y * 40;
 
+		if(x == 0 && y == 1)
+			t.isStartTile = true, start = t;
+
+		if(x == 29 && y == 18)
+			t.isEndTile = true, end = t;
+
 		t.posPixel = glm::vec2(dstRect.x, dstRect.y);
 		t.posIndex = glm::vec2(x, y);
 
@@ -127,11 +133,20 @@ glm::vec2 World::getTileCoord(int x = -1, int y = -1)
 	}
 	else
 	{
+		// assume mouse coords.... BOOO
 		_x = (int)InputHandler::Instance->GetMousePos().x;
 		_y = (int)InputHandler::Instance->GetMousePos().y;
 	}
 
 	return (glm::vec2(std::floor(_x/40.0f)*40, std::floor(_y/40.0f)*40));
+}
+
+glm::vec2 World::GetTileCoordByIndex(int idx)
+{
+	// MORE MAGIC NUMBERS
+	// 30 is the horizontal tile number
+	// 20 is the vertical tile number
+	return glm::vec2(idx%30, std::floor(idx/30));
 }
 
 void World::RenderMap(SDL_Renderer* r, float dt)
@@ -176,6 +191,7 @@ void World::Update(float const dt)
 
 	// do input handler stuff here... that means taking it out of the render function
 	// clear mouse states
+	EvalPath();
 
 	for(int i = 0; i < entities.size(); ++i)
 	{
@@ -238,4 +254,165 @@ glm::vec2 World::GetMouseUp()
 	glm::vec2 p = glm::vec2((float)mouseUp.x, (float)mouseUp.y);
 	mouseUp = glm::vec2(-1, -1);
 	return p;
+}
+
+void World::EvalPath()
+{
+	// A* search
+	std::list<PATHNODE> openList;
+	std::list<PATHNODE> closedList;
+
+	PATHNODE start = { nullptr, this->start, 0, 0, 0 };
+	openList.push_back(start);
+
+	while(openList.size() > 0)
+	{
+		PATHNODE N = openList.front();
+		openList.pop_front();
+
+		// get children to N
+		int curIdx = GetIndexByCoord(N.tile.posIndex);
+		std::vector<PATHNODE> children;
+
+		int pG = 0; // parents G value
+		if(N.parent)
+			pG = N.G;
+
+		// NORTH 
+		if(curIdx - 30 >= 0 && curIdx - 30 < map.size()) /* width in tiles */
+		{
+			TILE m = map[curIdx-30];
+			int h = Dist(m.posIndex, end.posIndex);
+			int g = 1.0 + pG;
+			PATHNODE t = {&N, map[curIdx-30], g, h, h+g};
+			children.push_back(t);
+		}
+
+		// NORTH EAST 
+		if(curIdx - 30 + 1 >= 0 && curIdx - 30 + 1 <  map.size()) /* width in tiles */
+		{
+			TILE m = map[curIdx-30+1];
+			int h = Dist(m.posIndex, end.posIndex);
+			int g = 1.2 + pG;
+			PATHNODE t = {&N, map[curIdx-30+1], g, h, h+g};
+			children.push_back(t);
+		}
+
+		// EAST
+		if(curIdx + 1 >= 0 && curIdx + 1 < map.size()) /* width in tiles */
+		{
+			TILE m = map[curIdx+1];
+			int h = Dist(m.posIndex, end.posIndex);
+			int g = 1.0 + pG;
+			PATHNODE t = {&N, map[curIdx+1], g, h, h+g};
+			children.push_back(t);
+		}
+
+		// SOUTH EAST 
+		if(curIdx + 30 + 1 >= 0 && curIdx + 30 + 1 < map.size()) /* width in tiles */
+		{
+			TILE m = map[curIdx + 30 + 1];
+			int h = Dist(m.posIndex, end.posIndex);
+			int g = 1.2 + pG;
+			PATHNODE t = {&N, map[curIdx + 30 + 1], g, h, h+g};
+			children.push_back(t);
+		}
+
+		// SOUTH
+		if(curIdx + 30 >= 0 && curIdx + 30 < map.size()) /* width in tiles */
+		{
+			TILE m = map[curIdx+30];
+
+
+			int h = Dist(m.posIndex, end.posIndex);
+			int g = 1.0 + pG;
+			PATHNODE t = {&N, map[curIdx+30], g, h, h+g};
+			children.push_back(t);
+		}
+
+		// SOUTH WEST 
+		if(curIdx + 30 - 1 >= 0 && curIdx + 30 -1 < map.size()) /* width in tiles */
+		{
+			TILE m = map[curIdx + 30 -1];
+			int h = Dist(m.posIndex, end.posIndex);
+			int g = 1.2 + pG;
+			PATHNODE t = {&N, map[curIdx + 30 -1], g, h, h+g};
+			children.push_back(t);
+		}
+
+		// WEST
+		if(curIdx - 1 >= 0 && curIdx - 1 < map.size()) /* width in tiles */
+		{
+			TILE m = map[curIdx - 1];
+			int h = Dist(m.posIndex, end.posIndex);
+			int g = 1.0 + pG;
+			PATHNODE t = {&N, map[curIdx - 1], g, h, h+g};
+			children.push_back(t);
+		}
+
+		// NORTH WEST 
+		if(curIdx - 30 - 1 >= 0 && curIdx - 30 - 1 < map.size()) /* width in tiles */
+		{
+			TILE m = map[curIdx - 30 - 1];
+			int h = Dist(m.posIndex, end.posIndex);
+			int g = 1.2 + pG;
+			PATHNODE t = {&N, map[curIdx - 30 - 1], g, h, h+g};
+			children.push_back(t);
+		}
+
+
+		for(int i = 0; i < children.size(); ++i)
+		{
+			// if this tile is the end tile we are done, just need to save the path
+			if(children[i].tile.isEndTile)
+			{
+				PATHNODE* p = &children[i];
+				safePath.push_front(map[GetIndexByCoord(p->tile.posIndex)]);
+				while(p = p->parent)
+				{
+					safePath.push_front(map[GetIndexByCoord(p->tile.posIndex)]);
+				}
+				break;
+			}
+
+			// if this tile has already been added to the open list AND
+			// there is it has a better F value we skip it
+			for(auto it = openList.begin(); it != openList.end(); ++it)
+			{
+				if((*it).tile.posIndex == children[i].tile.posIndex
+					&& (*it).F < children[i].F)
+				{
+					continue;
+				}
+			}
+
+			// do the same for the closed list
+			for(auto it = closedList.begin(); it != closedList.end(); ++it)
+			{
+				if((*it).tile.posIndex == children[i].tile.posIndex
+					&& (*it).F < children[i].F)
+				{
+					continue;
+				}
+			}
+
+			openList.push_back(children[i]);
+		}
+		
+		closedList.push_back(N);
+	}
+
+
+
+}
+
+
+int World::GetIndexByCoord(glm::vec2 c)
+{
+	return (c.y * ( 30 ) + c.x);
+}
+
+float World::Dist(glm::vec2 a, glm::vec2 b)
+{
+	return std::sqrtf(((a.x-b.x)*(a.x-b.x)) + ((a.y-b.y)*(a.y-b.y)));
 }

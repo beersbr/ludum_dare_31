@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <list>
 
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -64,6 +65,8 @@ struct TILE
 	{
 		isSelected = false;
 		isHovered = false;
+		isStartTile = false;
+		isEndTile = false;
 		Tower = nullptr;
 	}
 
@@ -79,9 +82,19 @@ struct TILE
 
 	SDL_Texture* baseTexture;		// used for the map creation
 
+	bool isStartTile;
+	bool isEndTile;
+
 	glm::vec2 posPixel;
 	glm::vec2 posIndex;
 };
+
+struct PATHNODE
+	{
+		PATHNODE* parent;
+		TILE tile;
+		float G, H, F;
+	};
 
 class World
 {
@@ -119,6 +132,8 @@ private:
 	glm::vec2 getPos(int index);
 	glm::vec2 getTileCoord(int x, int y);
 
+	TILE start;
+	TILE end;
 
 	std::vector<Entity*> entities;
 	Loader* loaderKing;
@@ -137,5 +152,12 @@ private:
 
 	// for listening to events
 	static std::vector<World*> listeners;
+
+	void EvalPath();
+	std::list<TILE> safePath;
+
+	glm::vec2 GetTileCoordByIndex(int idx);
+	int GetIndexByCoord(glm::vec2);
+	float Dist(glm::vec2, glm::vec2);
 };
 
