@@ -134,6 +134,7 @@ void LudumGame::HandleEvents()
 	SDL_Event event;
 	SDL_memset(&event, 0, sizeof(SDL_Event));
 
+	InputHandler::Instance()->ResetMouseClicks();
 	while(SDL_PollEvent(&event))
 	{
 		switch(event.type)
@@ -145,38 +146,38 @@ void LudumGame::HandleEvents()
 			break;
 		case SDL_KEYDOWN:
 			{
-				this->inputKing.EvalKeyDown(event);
+				InputHandler::Instance()->EvalKeyDown(event);
 				break;
 			}
 		case SDL_KEYUP:
 			{
-				this->inputKing.EvalKeyUp(event);
+				InputHandler::Instance()->EvalKeyUp(event);
 				break;
 			}
 		case SDL_WINDOWEVENT:
 			{
-				this->inputKing.EvalWindowEvent(event);
+				InputHandler::Instance()->EvalWindowEvent(event);
 				break;
 			}
 		case SDL_MOUSEBUTTONDOWN:
 			{
-				this->inputKing.EvalMouseDown(event);
+				InputHandler::Instance()->EvalMouseDown(event);
 				break;
 			}
 		case SDL_MOUSEBUTTONUP:
 			{
-				this->inputKing.EvalMouseUp(event);
+				InputHandler::Instance()->EvalMouseUp(event);
 				break;
 			}
 		case SDL_MOUSEMOTION:
 			{
-				this->inputKing.EvalMouseMotion(event);
+				InputHandler::Instance()->EvalMouseMotion(event);
 				break;
 			}
 		default:
 			{
-				//Whoever put this in, is an idiot
-				//fprintf(stdout, "EVENT TYPE: %d\n", event.type);
+				// Whoever put this in, is an idiot
+				// fprintf(stdout, "EVENT TYPE: %d\n", event.type);
 			}
 		}
 	}

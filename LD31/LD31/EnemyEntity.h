@@ -21,5 +21,5 @@ private:
 	Uint32 moveSpeed;
 	Uint32 atkSpeed;
 
-	glm::vec2 dest;
+	glm::vec2 dest;	
 };

@@ -1,9 +1,17 @@
 #include "InputHandler.h"
 
-InputHandler* InputHandler::Instance = nullptr;
+InputHandler* InputHandler::instance = nullptr;
+
+InputHandler* InputHandler::Instance()
+{
+	if(InputHandler::instance == nullptr)
+		InputHandler::instance = new InputHandler();
+	return InputHandler::instance;
+}
+
+
 InputHandler::InputHandler(void) : mouseButton(NULL)
 {
-	Instance = this;
 	mousePos = glm::vec2(0.0, 0.0);
 }
 
@@ -44,19 +52,12 @@ void InputHandler::EvalMouseDown(SDL_Event& ev)
 	//Mouse button was pressed, right click left click, amiright? We might have to tell someone the mouse clicked
 	if(ev.button.button == SDL_BUTTON_LEFT)
 	{
-		fprintf(stdout, "\n[!] LEFT MOUSE DOWN!\n[=] X pos : %f\n[=] Y pos: %f\n",  this->mousePos.x, this->mousePos.y);
-		for(auto i = leftClickListeners.begin(); i != leftClickListeners.end(); ++i)
-		{
-			(*i)(BUTTON_DOWN, mousePos.x, mousePos.y);
-		}
+		//fprintf(stdout, "\n[!] LEFT MOUSE DOWN!\n[=] X pos : %f\n[=] Y pos: %f\n",  this->mousePos.x, this->mousePos.y);
+
 	}
 	if(ev.button.button == SDL_BUTTON_RIGHT)
 	{
-		fprintf(stdout, "\n[!] RIGHT MOUSE DOWN!\n[=] X pos : %f\n[=] Y pos: %f",  this->mousePos.x, this->mousePos.y);
-		for(auto i = leftClickListeners.begin(); i != leftClickListeners.end(); ++i)
-		{
-			(*i)(BUTTON_DOWN, mousePos.x, mousePos.y);
-		}
+		//fprintf(stdout, "\n[!] RIGHT MOUSE DOWN!\n[=] X pos : %f\n[=] Y pos: %f",  this->mousePos.x, this->mousePos.y);
 	}
 
 }
@@ -70,22 +71,17 @@ void InputHandler::EvalMouseUp(SDL_Event& ev)
 {
 	this->mouseButton = ev.button.button;
 	//Mouse button was pressed, right click left click, amiright? We might have to tell someone the mouse clicked
+	MouseClick ms = { mousePos, mouseButton };
 	if(ev.button.button == SDL_BUTTON_LEFT)
 	{
-		fprintf(stdout, "\n[!] LEFT MOUSE UP!\n[=] X pos : %f\n[=] Y pos: %f\n",  this->mousePos.x, this->mousePos.y);
-		for(auto i = leftClickListeners.begin(); i != leftClickListeners.end(); ++i)
-		{
-			(*i)(BUTTON_UP, mousePos.x, mousePos.y);
-		}
+		//fprintf(stdout, "\n[!] LEFT MOUSE UP!\n[=] X pos : %f\n[=] Y pos: %f\n",  this->mousePos.x, this->mousePos.y);
+
 	}
 	if(ev.button.button == SDL_BUTTON_RIGHT)
 	{
-		fprintf(stdout, "\n[!] RIGHT MOUSE UP!\n[=] X pos : %f\n[=] Y pos: %f",  this->mousePos.x, this->mousePos.y);
-		for(auto i = leftClickListeners.begin(); i != leftClickListeners.end(); ++i)
-		{
-			(*i)(BUTTON_UP, mousePos.x, mousePos.y);
-		}
+		//fprintf(stdout, "\n[!] RIGHT MOUSE UP!\n[=] X pos : %f\n[=] Y pos: %f",  this->mousePos.x, this->mousePos.y);
 	}
+	mouseClicks.push_back(ms);
 }
 
 SDL_Keycode InputHandler::GetKeyDown()
@@ -99,14 +95,12 @@ glm::vec2 InputHandler::GetMousePos()
 	return mousePos;
 }
 
-bool InputHandler::ListenRightClick(MouseClickCallback ms)
+std::vector<MouseClick> InputHandler::GetMouseClicks()
 {
-	rightClickListeners.push_back(ms);
-	return false;
+	return mouseClicks;
 }
 
-bool InputHandler::ListenLeftClick(MouseClickCallback ms)
+void InputHandler::ResetMouseClicks()
 {
-	leftClickListeners.push_back(ms);
-	return false;
+	mouseClicks.erase(mouseClicks.begin(), mouseClicks.end());
 }

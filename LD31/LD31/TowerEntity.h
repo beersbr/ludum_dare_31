@@ -4,6 +4,7 @@ class TowerEntity :
 	public Entity
 {
 public:
+	TowerEntity();
 	TowerEntity(std::map<std::string, std::string>* props);
 	TowerEntity(glm::vec2 pos, glm::vec2 size, std::map<std::string, std::string>* props);
 	~TowerEntity();
@@ -19,7 +20,6 @@ private:
 	Uint32 damage;
 	Uint32 health;
 	Uint32 shotSpeed;
-	glm::vec3 curDirection;
 
 };
 

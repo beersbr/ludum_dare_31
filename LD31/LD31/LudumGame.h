@@ -46,7 +46,6 @@ public:
 	World *world;
 
 private:
-	InputHandler inputKing;
 	Loader* loaderKing;
 
 	GLuint VAO; // vertex array object :: OpenGL

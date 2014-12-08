@@ -1,5 +1,13 @@
 #include "TowerEntity.h"
 
+TowerEntity::TowerEntity()
+	: Entity()
+{
+	damage = 10;
+	health = 100;
+	shotSpeed = 1/2; // atack every 0.5 seconds
+	dir = glm::vec2(1, 0); // facing right
+}
 
 TowerEntity::TowerEntity(glm::vec2 pos, glm::vec2 size, std::map<std::string, std::string>* props) 
 	: Entity(pos, size)

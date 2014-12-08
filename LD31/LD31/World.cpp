@@ -130,11 +130,9 @@ bool World::CreateMap(SDL_Renderer* r)
 	endTileTexture = SDL_CreateTextureFromSurface(r, e);
 	SDL_SetTextureBlendMode(endTileTexture, SDL_BLENDMODE_BLEND);
 	
-	InputHandler::Instance->ListenLeftClick(World::worldLeftMouseCallback);
-	InputHandler::Instance->ListenRightClick(World::worldRightMouseCallback);
-
 	EvalPath();
 
+	// test enemey
 	EnemyEntity* enemy = new EnemyEntity(); 
 	enemy->texture = ImageController::Instance()->GetTexture("snowman1");
 	enemy->frames = 4;
@@ -212,6 +210,10 @@ void World::RenderMap(SDL_Renderer* r, float dt)
 			&dst, 
 			std::atan2(entities[i]->vel.x, entities[i]->vel.y) * -(180.0/3.14159), 
 			NULL, SDL_FLIP_NONE);
+
+
+
+
 	}
 
 	// hovers
@@ -223,7 +225,7 @@ void World::RenderMap(SDL_Renderer* r, float dt)
 	SDL_Rect est = {(int)e.x*40, (int)e.y*40, 40, 40};
 	SDL_RenderCopy(r, endTileTexture, &src, &est);
 
-	glm::vec2 m = getTileCoord(InputHandler::Instance->GetMousePos().x, InputHandler::Instance->GetMousePos().y);
+	glm::vec2 m = getTileCoord(InputHandler::Instance()->GetMousePos().x, InputHandler::Instance()->GetMousePos().y);
 	SDL_Rect dst = {(int)m.x*40, (int)m.y*40, 40, 40};
 	SDL_RenderCopy(r, hoverTexture, &src, &dst);
 }
@@ -236,8 +238,53 @@ void World::Update(float const dt)
 	// clear mouse states
 	if((curTime += dt) > 5){
 		// find a new path every 5 seconds OR on map change
-		SDL_CreateThread(CreatePathThread, "createPath", (void*)this);
+		//SDL_CreateThread(CreatePathThread, "createPath", (void*)this);
 		curTime = 0.0;
+	}
+
+	if(InputHandler::Instance()->GetMouseClicks().size() > 0)
+	{
+		/*EnemyEntity* enemy = new EnemyEntity(); 
+		enemy->texture = ImageController::Instance()->GetTexture("snowman1");
+		enemy->frames = 4;
+		SDL_Rect frameSize = {0, 0, 80, 80};
+		enemy->frameRect = frameSize;
+		enemy->size = glm::vec2(40.0f, 40.0f);
+		enemy->pos = glm::vec2(580, 380);
+		enemy->world = this;
+
+		entities.push_back(enemy);*/
+
+		glm::vec2 tilePixelCoord = getTileCoord(InputHandler::Instance()->GetMousePos().x, InputHandler::Instance()->GetMousePos().y);
+		tilePixelCoord = glm::vec2(tilePixelCoord.x * 40, tilePixelCoord.y * 40);
+
+		TowerEntity* tower = new TowerEntity();
+		tower->texture = ImageController::Instance()->GetTexture("projectile-tower");
+		tower->frames = 1;
+		SDL_Rect frameSize = { 0, 0, 120, 120 };
+		tower->frameRect = frameSize;
+		tower->size = glm::vec2(40, 40);
+		tower->pos =  tilePixelCoord;
+		tower->world = this;
+
+		int idx = GetIndexByCoord(getTileCoord(tilePixelCoord.x, tilePixelCoord.y));
+
+		// TODO:  check if it is in bounds probably...
+		if(!map[idx].hasTower())
+		{
+			map[idx].Tower = tower;
+			entities.push_back(tower);
+			//EvalPath();
+			for(auto i = safePath.begin(); i != safePath.end(); ++i)
+			{
+				if((*i).posPixel == tower->pos)
+				{
+					SDL_CreateThread(CreatePathThread, "createPath", (void*)this);
+					break;
+				}
+			}
+			
+		}
 	}
 
 
@@ -280,29 +327,6 @@ Entity* World::getEntityAtPos(glm::vec2 const pos)
 	return NULL;
 }
 
-void World::SetMouseDown(int x, int y)
-{
-	mouseUp = glm::vec2(x, y);
-}
-
-void World::SetMouseUp(int x, int y)
-{
-	mouseDown = glm::vec2(x, y);
-}
-
-glm::vec2 World::GetMouseDown()
-{
-	glm::vec2 p = glm::vec2((float)mouseDown.x, (float)mouseDown.y);
-	mouseDown = glm::vec2(-1, -1);
-	return p;
-}
-
-glm::vec2 World::GetMouseUp()
-{
-	glm::vec2 p = glm::vec2((float)mouseUp.x, (float)mouseUp.y);
-	mouseUp = glm::vec2(-1, -1);
-	return p;
-}
 
 std::list<TILE> World::EvalPath()
 {
@@ -334,89 +358,113 @@ std::list<TILE> World::EvalPath()
 		// NORTH 
 		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x, N.tile.posIndex.y-1))) /* width in tiles */
 		{
-			TILE m = *t; // map[curIdx-30];
-			int h = Dist(m.posIndex, end.posIndex);
-			int g = 1.0 + pG;
-			PATHNODE* p = (new PATHNODE(N));
-			PATHNODE t = {p, map[curIdx-30], g, h, h+g};
-			children.push_back(t);
+			if(t->hasTower() == false)
+			{
+				TILE m = *t; // map[curIdx-30];
+				int h = Dist(m.posIndex, end.posIndex);
+				int g = 1.0 + pG;
+				PATHNODE* p = (new PATHNODE(N));
+				PATHNODE t = {p, map[curIdx-30], g, h, h+g};
+				children.push_back(t);
+			}
 		}
 
 		// NORTH EAST 
-		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x+1, N.tile.posIndex.y-1))) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x+1, N.tile.posIndex.y-1))) 
 		{
-			TILE m = *t; //map[curIdx-30+1];
-			int h = Dist(m.posIndex, end.posIndex);
-			int g = 1.2 + pG;
-			PATHNODE* p = (new PATHNODE(N));
-			PATHNODE t = {p, map[curIdx-30+1], g, h, h+g};
-			children.push_back(t);
+			if(t->hasTower() == false)
+			{
+				TILE m = *t; //map[curIdx-30+1];
+				int h = Dist(m.posIndex, end.posIndex);
+				int g = 1.2 + pG;
+				PATHNODE* p = (new PATHNODE(N));
+				PATHNODE t = {p, map[curIdx-30+1], g, h, h+g};
+				children.push_back(t);
+			}
 		}
 
 		// EAST
-		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x+1, N.tile.posIndex.y))) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x+1, N.tile.posIndex.y))) 
 		{
-			TILE m = *t; // map[curIdx+1];
-			int h = Dist(m.posIndex, end.posIndex);
-			int g = 1.0 + pG;
-			PATHNODE* p = (new PATHNODE(N));
-			PATHNODE t = {p, map[curIdx+1], g, h, h+g};
-			children.push_back(t);
+			if(t->hasTower() == false)
+			{
+				TILE m = *t; // map[curIdx+1];
+				int h = Dist(m.posIndex, end.posIndex);
+				int g = 1.0 + pG;
+				PATHNODE* p = (new PATHNODE(N));
+				PATHNODE t = {p, map[curIdx+1], g, h, h+g};
+				children.push_back(t);
+			}
 		}
 
 		// SOUTH EAST 
-		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x+1, N.tile.posIndex.y+1))) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x+1, N.tile.posIndex.y+1))) 
 		{
-			TILE m = *t; // map[curIdx + 30 + 1];
-			int h = Dist(m.posIndex, end.posIndex);
-			int g = 1.2 + pG;
-			PATHNODE* p = (new PATHNODE(N));
-			PATHNODE t = {p, map[curIdx + 30 + 1], g, h, h+g};
-			children.push_back(t);
+			if(t->hasTower() == false)
+			{
+				TILE m = *t; // map[curIdx + 30 + 1];
+				int h = Dist(m.posIndex, end.posIndex);
+				int g = 1.2 + pG;
+				PATHNODE* p = (new PATHNODE(N));
+				PATHNODE t = {p, map[curIdx + 30 + 1], g, h, h+g};
+				children.push_back(t);
+			}
 		}
 
 		// SOUTH
-		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x, N.tile.posIndex.y+1))) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x, N.tile.posIndex.y+1))) 
 		{
-			TILE m = *t; //map[curIdx+30];
-			int h = Dist(m.posIndex, end.posIndex);
-			int g = 1.0 + pG;
-			PATHNODE* p = (new PATHNODE(N));
-			PATHNODE t = {p, map[curIdx+30], g, h, h+g};
-			children.push_back(t);
+			if(t->hasTower() == false)
+			{
+				TILE m = *t; //map[curIdx+30];
+				int h = Dist(m.posIndex, end.posIndex);
+				int g = 1.0 + pG;
+				PATHNODE* p = (new PATHNODE(N));
+				PATHNODE t = {p, map[curIdx+30], g, h, h+g};
+				children.push_back(t);
+			}
 		}
 
 		// SOUTH WEST 
-		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x-1, N.tile.posIndex.y+1))) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x-1, N.tile.posIndex.y+1))) 
 		{
-			TILE m = *t; //map[curIdx + 30 -1];
-			int h = Dist(m.posIndex, end.posIndex);
-			int g = 1.2 + pG;
-			PATHNODE* p = (new PATHNODE(N));
-			PATHNODE t = {p, map[curIdx + 30 -1], g, h, h+g};
-			children.push_back(t);
+			if(t->hasTower() == false)
+			{
+				TILE m = *t; //map[curIdx + 30 -1];
+				int h = Dist(m.posIndex, end.posIndex);
+				int g = 1.2 + pG;
+				PATHNODE* p = (new PATHNODE(N));
+				PATHNODE t = {p, map[curIdx + 30 -1], g, h, h+g};
+				children.push_back(t);
+			}
 		}
 
 		// WEST
-		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x-1, N.tile.posIndex.y))) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x-1, N.tile.posIndex.y))) 
 		{
-			TILE m = *t; // map[curIdx - 1];
-			int h = Dist(m.posIndex, end.posIndex);
-			int g = 1.0 + pG;
-			PATHNODE* p = (new PATHNODE(N));
-			PATHNODE t = {p, map[curIdx - 1], g, h, h+g};
-			children.push_back(t);
+			if(t->hasTower() == false)
+			{
+				TILE m = *t; // map[curIdx - 1];
+				int h = Dist(m.posIndex, end.posIndex);
+				int g = 1.0 + pG;
+				PATHNODE* p = (new PATHNODE(N));
+				PATHNODE t = {p, map[curIdx - 1], g, h, h+g};
+				children.push_back(t);
+			}
 		}
 
 		// NORTH WEST 
 		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x-1, N.tile.posIndex.y-1))) /* width in tiles */
 		{
-			TILE m = *t; //map[curIdx - 30 - 1];
-			int h = Dist(m.posIndex, end.posIndex);
-			int g = 1.2 + pG;
-			PATHNODE* p = (new PATHNODE(N));
-			PATHNODE t = { p, map[curIdx - 30 - 1], g, h, h+g};
-			children.push_back(t);
+			if(t->hasTower() == false)
+			{
+				TILE m = *t; //map[curIdx - 30 - 1];
+				int h = Dist(m.posIndex, end.posIndex);
+				int g = 1.2 + pG;
+				PATHNODE* p = (new PATHNODE(N));
+				PATHNODE t = { p, map[curIdx - 30 - 1], g, h, h+g};
+				children.push_back(t);
+			}
 		}
 
 
@@ -452,6 +500,7 @@ std::list<TILE> World::EvalPath()
 					&& (*it).F <= children[i].F)
 				{
 					dontAdd = true;
+					break;
 				}
 			}
 
@@ -462,6 +511,7 @@ std::list<TILE> World::EvalPath()
 					&& (*it).F <= children[i].F)
 				{
 					dontAdd = true;
+					break;
 				}
 			}
 

@@ -73,7 +73,7 @@ struct TILE
 
 	bool hasTower()
 	{
-		return (Tower == nullptr);
+		return (Tower != nullptr);
 	}
 
 	Entity* Tower;
@@ -126,12 +126,6 @@ public:
 
 	Entity* getEntityAtPos(glm::vec2 const pos);
 	bool isPointInEntity(glm::vec2 const pos, Entity* entity);
-
-	void SetMouseDown(int x, int y);
-	void SetMouseUp(int x, int y);
-	glm::vec2 GetMouseDown();
-	glm::vec2 GetMouseUp();
-
 
 	std::list<TILE> EvalPath();
 

@@ -46,7 +46,7 @@ void EnemyEntity::Update(float time)
 	{
 		// check if we are close enough to that position
 		// go to the next tiel if we are
-		if(world->Dist(dest, pos) < 15.0)
+		if(world->Dist(dest, pos) < 10.0)
 		{
 			for(auto i = world->safePath.begin(); i != world->safePath.end(); ++i)
 			{
@@ -78,7 +78,7 @@ void EnemyEntity::Update(float time)
 	vel = glm::vec2(vel.x + (dir.x*moveSpeed*time), vel.y+(dir.y*moveSpeed*time));
 
 	pos += vel;
-	vel = glm::vec2(vel.x*0.92, vel.y*0.92);
+	vel = glm::vec2(vel.x*0.89, vel.y*0.89);
 
 	if((currentFrameLife += time) >= frameLife)
 	{

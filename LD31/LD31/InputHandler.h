@@ -7,20 +7,18 @@
 #include <SDL.h>
 #include <glm.hpp>
 
-enum BUTTON_STATE{
-	BUTTON_DOWN,
-	BUTTON_UP
-};
-
-typedef int (*MouseClickCallback)(int, int, int);
+struct {
+	glm::vec2 pos;
+	Uint8 sdl_button;
+} typedef MouseClick;
 
 class InputHandler
 {
 public:
-	InputHandler(void);
+	
 	~InputHandler(void);
-
-	static InputHandler* Instance;
+	static InputHandler* Instance();
+	
 		 
 	void EvalKeyDown(SDL_Event& ev);
 	void EvalKeyUp(SDL_Event& ev);
@@ -32,16 +30,19 @@ public:
 	Uint32 getMouseType();
 	Uint32 GetMouseButton();
 	SDL_Keycode GetKeyDown();
-	
-	bool ListenRightClick(MouseClickCallback);
-	bool ListenLeftClick(MouseClickCallback);
+
+	std::vector<MouseClick> GetMouseClicks();
+	void ResetMouseClicks();
 
 private:
+	InputHandler(void);
+	static InputHandler* instance;
+
+
 	SDL_Keycode keyDown;
 	Uint32 mouseButton;
 	glm::vec2 mousePos;
 
-	std::vector<MouseClickCallback> rightClickListeners;
-	std::vector<MouseClickCallback> leftClickListeners;
+	std::vector<MouseClick> mouseClicks;
 };
 
