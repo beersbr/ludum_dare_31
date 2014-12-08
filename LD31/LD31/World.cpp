@@ -1,5 +1,12 @@
 #include "World.h"
 
+static int CreatePathThread(void *ptr)
+{
+	World* world = (World*)ptr;
+	(world->EvalPath());
+	return 0;
+}
+
 
 World::World(Loader* loader)
 {
@@ -195,9 +202,9 @@ void World::Update(float const dt)
 
 	// do input handler stuff here... that means taking it out of the render function
 	// clear mouse states
-	if((curTime += dt) > 2){
-		//SDL_Thread
-		EvalPath();
+	if((curTime += dt) > 5){
+		// find a new path every 5 seconds OR on map change
+		SDL_CreateThread(CreatePathThread, "createPath", (void*)this);
 		curTime = 0.0;
 	}
 
@@ -265,7 +272,7 @@ glm::vec2 World::GetMouseUp()
 	return p;
 }
 
-void World::EvalPath()
+std::list<TILE> World::EvalPath()
 {
 	// A* search
 	std::list<PATHNODE> pathnodes; // a list of all the nodes to keep the data in scope;
@@ -392,6 +399,8 @@ void World::EvalPath()
 
 			if(children[i].tile.isEndTile)
 			{
+				//std::list<TILE> safePath;
+
 				PATHNODE* p = &children[i];
 				safePath.push_front(map[GetIndexByCoord(p->tile.posIndex)]);
 				while(p = p->parent)
@@ -399,7 +408,7 @@ void World::EvalPath()
 					safePath.push_front(map[GetIndexByCoord(p->tile.posIndex)]);
 				}
 				fprintf(stdout, "Found a path!\n");
-				return;
+				return safePath;
 			}
 
 			bool dontAdd = false;
@@ -457,3 +466,4 @@ bool PATHNODE_sort(const PATHNODE& first, const PATHNODE& second)
 {
 	return (first.F < second.F);
 }
+

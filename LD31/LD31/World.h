@@ -132,6 +132,9 @@ public:
 	glm::vec2 GetMouseDown();
 	glm::vec2 GetMouseUp();
 
+
+	std::list<TILE> EvalPath();
+
 private:
 	glm::vec2 getPos(int index);
 	glm::vec2 getTileCoord(int x, int y);
@@ -157,7 +160,7 @@ private:
 	// for listening to events
 	static std::vector<World*> listeners;
 
-	void EvalPath();
+	
 	std::list<TILE> safePath;
 
 	glm::vec2 GetTileCoordByIndex(int idx);
