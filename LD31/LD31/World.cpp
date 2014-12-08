@@ -7,7 +7,6 @@ static int CreatePathThread(void *ptr)
 	return 0;
 }
 
-
 World::World(Loader* loader)
 {
 	this->loaderKing = loader;
@@ -19,7 +18,6 @@ World::~World(void)
 {
 
 }
-
 
 bool World::createTowerEntity(std::string entityName)
 {
@@ -109,26 +107,44 @@ bool World::CreateMap(SDL_Renderer* r)
 	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 	
 	// create the hover texture
-	SDL_Surface* s = SDL_CreateRGBSurface(0, 40, 40, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
-	SDL_Rect rect = {0, 0, 40, 40};
-	SDL_FillRect(s, &rect, 0xFF000033);
-	SDL_SetSurfaceBlendMode(s, SDL_BLENDMODE_BLEND);
-	hoverTexture = SDL_CreateTextureFromSurface(r, s);
+	SDL_Surface* h = SDL_CreateRGBSurface(0, 40, 40, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+	SDL_Rect hrect = {0, 0, 40, 40};
+	SDL_FillRect(h, &hrect, 0xFF000033);
+	SDL_SetSurfaceBlendMode(h, SDL_BLENDMODE_BLEND);
+	hoverTexture = SDL_CreateTextureFromSurface(r, h);
 	SDL_SetTextureBlendMode(hoverTexture, SDL_BLENDMODE_BLEND);
+
+	// start tile
+	SDL_Surface* s = SDL_CreateRGBSurface(0, 40, 40, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+	SDL_Rect srect = {0, 0, 40, 40};
+	SDL_FillRect(s, &srect, 0x00FF0033);
+	SDL_SetSurfaceBlendMode(s, SDL_BLENDMODE_BLEND);
+	startTileTexture = SDL_CreateTextureFromSurface(r, s);
+	SDL_SetTextureBlendMode(startTileTexture, SDL_BLENDMODE_BLEND);
+
+	// end tile
+	SDL_Surface* e = SDL_CreateRGBSurface(0, 40, 40, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+	SDL_Rect erect = {0, 0, 40, 40};
+	SDL_FillRect(e, &erect, 0x0000FF33);
+	SDL_SetSurfaceBlendMode(e, SDL_BLENDMODE_BLEND);
+	endTileTexture = SDL_CreateTextureFromSurface(r, e);
+	SDL_SetTextureBlendMode(endTileTexture, SDL_BLENDMODE_BLEND);
 	
 	InputHandler::Instance->ListenLeftClick(World::worldLeftMouseCallback);
 	InputHandler::Instance->ListenRightClick(World::worldRightMouseCallback);
 
-	EnemyEntity* e = new EnemyEntity(); 
-	e->texture = ImageController::Instance()->GetTexture("snowman1");
-	e->frames = 4;
+	EvalPath();
+
+	EnemyEntity* enemy = new EnemyEntity(); 
+	enemy->texture = ImageController::Instance()->GetTexture("snowman1");
+	enemy->frames = 4;
 	SDL_Rect frameSize = {0, 0, 80, 80};
-	e->frameRect = frameSize;
-	e->size = glm::vec2(40.0f, 40.0f);
-	e->pos = glm::vec2(580, 380);
+	enemy->frameRect = frameSize;
+	enemy->size = glm::vec2(40.0f, 40.0f);
+	enemy->pos = glm::vec2(580, 380);
+	enemy->world = this;
 
-
-	entities.push_back(e);
+	entities.push_back(enemy);
 
 	return false;
 }
@@ -149,7 +165,7 @@ glm::vec2 World::getTileCoord(int x = -1, int y = -1)
 		return glm::vec2(-1, -1);
 	}
 
-	return (glm::vec2(std::floor(_x/40.0f)*40, std::floor(_y/40.0f)*40));
+	return (glm::vec2(std::floor(_x/40.0f), std::floor(_y/40.0f)));
 }
 
 glm::vec2 World::GetTileCoordByIndex(int idx)
@@ -184,15 +200,31 @@ void World::RenderMap(SDL_Renderer* r, float dt)
 	}
 	doodads = d;
 
+	// enemies
 	for(int i = 0; i < entities.size(); ++i)
 	{
+		// should probably be responsible for drawing itself... oh well. NO TIME!
 		SDL_Rect dst = {entities[i]->pos.x, entities[i]->pos.y, entities[i]->size.x, entities[i]->size.y };
-		SDL_RenderCopy(r, entities[i]->texture, &entities[i]->frameRect, &dst);
+		SDL_RenderCopyEx(
+			r, 
+			entities[i]->texture, 
+			&entities[i]->frameRect, 
+			&dst, 
+			std::atan2(entities[i]->vel.x, entities[i]->vel.y) * -(180.0/3.14159), 
+			NULL, SDL_FLIP_NONE);
 	}
 
 	// hovers
+	glm::vec2 s = getTileCoord(start.posPixel.x, start.posPixel.y);
+	SDL_Rect sst = {(int)s.x*40, (int)s.y*40, 40, 40};
+	SDL_RenderCopy(r, startTileTexture, &src, &sst);
+
+	glm::vec2 e = getTileCoord(end.posPixel.x, end.posPixel.y);
+	SDL_Rect est = {(int)e.x*40, (int)e.y*40, 40, 40};
+	SDL_RenderCopy(r, endTileTexture, &src, &est);
+
 	glm::vec2 m = getTileCoord(InputHandler::Instance->GetMousePos().x, InputHandler::Instance->GetMousePos().y);
-	SDL_Rect dst = {(int)m.x, (int)m.y, 40, 40};
+	SDL_Rect dst = {(int)m.x*40, (int)m.y*40, 40, 40};
 	SDL_RenderCopy(r, hoverTexture, &src, &dst);
 }
 

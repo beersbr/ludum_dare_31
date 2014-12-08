@@ -135,9 +135,20 @@ public:
 
 	std::list<TILE> EvalPath();
 
-private:
+	int GetIndexByCoord(glm::vec2);
+	float Dist(glm::vec2, glm::vec2);
+
+	glm::vec2 GetTileCoordByIndex(int idx);
+	TILE* GetTileAtCoord(glm::vec2 coord);
 	glm::vec2 getPos(int index);
 	glm::vec2 getTileCoord(int x, int y);
+
+	std::list<TILE> safePath;
+
+	std::vector<TILE> map;
+
+private:
+	
 
 	TILE start;
 	TILE end;
@@ -150,23 +161,16 @@ private:
 	glm::vec2 mouseDown;
 
 	std::vector<DOODAD> doodads;
-	std::vector<TILE> map;
 
 	SDL_Surface* surface;
 	SDL_Texture* texture;
 
 	SDL_Texture* hoverTexture;
+	SDL_Texture* startTileTexture;
+	SDL_Texture* endTileTexture;
 
 	// for listening to events
 	static std::vector<World*> listeners;
-
-	
-	std::list<TILE> safePath;
-
-	glm::vec2 GetTileCoordByIndex(int idx);
-	TILE* GetTileAtCoord(glm::vec2 coord);
-	int GetIndexByCoord(glm::vec2);
-	float Dist(glm::vec2, glm::vec2);
 
 	float curTime;
 };

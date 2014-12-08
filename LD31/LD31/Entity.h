@@ -27,6 +27,9 @@ public:
 	
 	glm::vec2 pos;
 	glm::vec2 size;
+	glm::vec2 dir;
+	glm::vec2 vel;
+
 	Uint32 assetId;
 	bool isDead;
 
@@ -41,7 +44,7 @@ public:
 	Uint32 id;
 	Uint32 typeId;
 
-	World* entities; //reference to the world
+	World* world; //reference to the world
 
 protected:
 	static Uint32 Ids;
