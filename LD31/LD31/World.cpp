@@ -97,9 +97,19 @@ bool World::CreateMap(SDL_Renderer* r)
 	hoverTexture = SDL_CreateTextureFromSurface(r, s);
 	SDL_SetTextureBlendMode(hoverTexture, SDL_BLENDMODE_BLEND);
 	
-
 	InputHandler::Instance->ListenLeftClick(World::worldLeftMouseCallback);
 	InputHandler::Instance->ListenRightClick(World::worldRightMouseCallback);
+
+	EnemyEntity* e = new EnemyEntity(); 
+	e->texture = ImageController::Instance()->GetTexture("snowman1");
+	e->frames = 4;
+	SDL_Rect frameSize = {0, 0, 80, 80};
+	e->frameRect = frameSize;
+	e->size = glm::vec2(40.0f, 40.0f);
+	e->pos = glm::vec2(580, 380);
+
+
+	entities.push_back(e);
 
 	return false;
 }
@@ -148,6 +158,12 @@ void World::RenderMap(SDL_Renderer* r, float dt)
 	}
 	doodads = d;
 
+	for(int i = 0; i < entities.size(); ++i)
+	{
+		SDL_Rect dst = {entities[i]->pos.x, entities[i]->pos.y, entities[i]->size.x, entities[i]->size.y };
+		SDL_RenderCopy(r, entities[i]->texture, &entities[i]->frameRect, &dst);
+	}
+
 	// hovers
 	glm::vec2 m = getTileCoord();
 	SDL_Rect dst = {(int)m.x, (int)m.y, 40, 40};
@@ -160,6 +176,12 @@ void World::Update(float const dt)
 
 	// do input handler stuff here... that means taking it out of the render function
 	// clear mouse states
+
+	for(int i = 0; i < entities.size(); ++i)
+	{
+		entities[i]->Update(dt);
+	}
+
 }
 
 bool World::isPointInEntity(glm::vec2 const pos, Entity* entity)

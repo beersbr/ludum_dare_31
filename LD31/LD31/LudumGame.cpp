@@ -48,7 +48,7 @@ void LudumGame::Init()
 	}
 
 	// so that we can load jpgs
-	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
+	//IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
 	//SDL_GL_SetSwapInterval(1);
 
@@ -94,12 +94,20 @@ void LudumGame::Init()
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
+	// load images that we might need and tag them
+	// TODO: this should be put in a json and given to us by the loader as a list of tags and paths
+	ImageController::Instance()->Load(renderer, "snowman1", "assets/snowman1-sprite.png");
+	ImageController::Instance()->Load(renderer, "snowman2", "assets/snowman2-sprite.png");
+	ImageController::Instance()->Load(renderer, "blood-snow1", "assets/blood-snow-1.jpg");
+	ImageController::Instance()->Load(renderer, "projectile-tower", "assets/projectile-tower.png");
+
 	world = new World(nullptr);
 	world->CreateMap(renderer);
 }
 
 void LudumGame::Update(float dt)
 {
+	world->Update(dt);
 	// TODO: Check input and run relevent component methods
 }
 
@@ -192,6 +200,7 @@ void LudumGame::Run()
 		time = SDL_GetTicks();
 		unsigned int elapsedTime = time - lastTime;
 
+
 		float t = (time - start)/1000;
 		float FPS = frames/(std::max(t, 0.000001f));
 
@@ -204,11 +213,12 @@ void LudumGame::Run()
 
 		if(timer > 1000)
 		{
-			fprintf(stdout, "FPS: %f\n", FPS);
+			fprintf(stdout, "FPS: %lf -- %lf\n", FPS, elapsedTime/1000.0f);
+
 			timer = 0;
 		}
 
-		float dt = 0.0f;
+		double dt = elapsedTime/1000.0f;
 
 		HandleEvents();
 		Update(dt);

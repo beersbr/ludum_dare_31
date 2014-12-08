@@ -6,6 +6,7 @@
 #include <SDL_opengl.h>
 
 #include "Util.h"
+#include "ImageController.h"
 #include "Entity.h"
 #include "InputHandler.h"
 #include "Loader.h"

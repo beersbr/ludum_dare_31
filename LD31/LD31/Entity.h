@@ -30,7 +30,13 @@ public:
 	Uint32 assetId;
 	bool isDead;
 
-	SDL_Texture* surface;
+	SDL_Texture* texture;
+
+	int frames;
+	SDL_Rect frameRect; // describes the frame size
+	float frameLife;
+	float currentFrameLife;
+	int currentFrame;
 
 	Uint32 id;
 	Uint32 typeId;

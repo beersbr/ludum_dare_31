@@ -6,6 +6,8 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
+#include "ImageController.h"
+
 #include "Entity.h"
 #include "TowerEntity.h"
 #include "EnemyEntity.h"
@@ -114,16 +116,16 @@ public:
 	glm::vec2 GetMouseUp();
 
 private:
+	glm::vec2 getPos(int index);
+	glm::vec2 getTileCoord(int x, int y);
+
+
 	std::vector<Entity*> entities;
 	Loader* loaderKing;
 	std::vector<Entity*> tiles;
 
 	glm::vec2 mouseUp;
 	glm::vec2 mouseDown;
-
-private:
-	glm::vec2 getPos(int index);
-	glm::vec2 getTileCoord(int x, int y);
 
 	std::vector<DOODAD> doodads;
 	std::vector<TILE> map;

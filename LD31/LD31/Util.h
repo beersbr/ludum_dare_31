@@ -5,6 +5,8 @@
 #include <SDL_image.h>
 #include <SDL_opengl.h>
 
+#include "ImageController.h"
+
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	const int RMASK = 0xff000000;
 	const int GMASK = 0x00ff0000;

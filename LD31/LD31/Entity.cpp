@@ -12,6 +12,9 @@ Uint32 Entity::RequestId()
 Entity::Entity()
 {
 	id = Entity::RequestId();
+	frameLife = 1/8.0f; // 1/8th of a second for each frame
+	currentFrameLife = 0.0f;
+	currentFrame = 0;
 }
 
 Entity::Entity(glm::vec2 position, glm::vec2 size) 
