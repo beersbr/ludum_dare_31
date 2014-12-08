@@ -1,12 +1,10 @@
 #pragma once
 
-
 #include <iostream>
 #include <vector>
 #include <functional>
 
 #include <SDL.h>
-
 #include <glm.hpp>
 
 enum BUTTON_STATE{
@@ -23,26 +21,25 @@ public:
 	~InputHandler(void);
 
 	static InputHandler* Instance;
-
-	void evalKeyDown(SDL_Event& ev);
-	void evalKeyUp(SDL_Event& ev);
-	void evalWindowEvent(SDL_Event& ev);
-	void evalMouseMotion(SDL_Event& ev);
-	void evalMouseDown(SDL_Event& ev);
-	void evalMouseUp(SDL_Event& ev);
-	Uint32 curMouseX();
-	Uint32 curMouseY();
+		 
+	void EvalKeyDown(SDL_Event& ev);
+	void EvalKeyUp(SDL_Event& ev);
+	void EvalWindowEvent(SDL_Event& ev);
+	void EvalMouseMotion(SDL_Event& ev);
+	void EvalMouseDown(SDL_Event& ev);
+	void EvalMouseUp(SDL_Event& ev);
+	glm::vec2 GetMousePos();
 	Uint32 getMouseType();
-	SDL_Keycode getKeyDown();
+	Uint32 GetMouseButton();
+	SDL_Keycode GetKeyDown();
 	
-	bool listenRightClick(MouseClickCallback);
-	bool listenLeftClick(MouseClickCallback);
+	bool ListenRightClick(MouseClickCallback);
+	bool ListenLeftClick(MouseClickCallback);
 
 private:
 	SDL_Keycode keyDown;
-	Uint32 mouseType;
-	Uint32 mouseX;
-	Uint32 mouseY;
+	Uint32 mouseButton;
+	glm::vec2 mousePos;
 
 	std::vector<MouseClickCallback> rightClickListeners;
 	std::vector<MouseClickCallback> leftClickListeners;

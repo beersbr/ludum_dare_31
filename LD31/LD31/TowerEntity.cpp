@@ -10,7 +10,7 @@ TowerEntity::TowerEntity(std::vector<Entity*>* entities, std::map<std::string, s
 }
 
 
-TowerEntity::TowerEntity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size, std::map<std::string, std::string>* props) : Entity(entities, pos, size)
+TowerEntity::TowerEntity(std::vector<Entity*>* entities, glm::vec2 pos, glm::vec2 size, std::map<std::string, std::string>* props) : Entity(entities, pos, size)
 {
 	this->bulletType = (*props)["ammoType"];
 	this->health = atoi((*props)["health"].c_str());

@@ -3,27 +3,17 @@
 #include "Component.h"
 
 
-Entity::Entity(glm::vec3 position, glm::vec3 size)
+Entity::Entity(glm::vec2 position, glm::vec2 size) : pos(position), size(size)
+{}
+
+Entity::Entity(std::vector<Entity*>* entities) : entities(entities)
 {
-	this->pos = position;
-	this->size = size;
+	this->pos = glm::vec2(0.0, 0.0);
+	this->size = glm::vec2(0.0, 0.0);
 }
 
-Entity::Entity(std::vector<Entity*>* entities)
+Entity::Entity(std::vector<Entity*>* entities, glm::vec2 pos, glm::vec2 size) : entities(entities), pos(pos), size(size)
 {
-	//this->myWorld = world;
-	this->entities = (entities);
-	this->pos = glm::vec3(0.0, 0.0, 0.0);
-	this->size = glm::vec3(0.0, 0.0, 0.0);
-	//components.clear();
-	//Entity::entities.push_back(this);
-}
-
-Entity::Entity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size)
-{
-	this->entities = entities;
-	this->pos = pos;
-	this->size = size;
 }
 
 

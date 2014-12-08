@@ -5,7 +5,7 @@ AmmoEntity::AmmoEntity(std::vector<Entity*>* entities) : Entity(entities)
 {
 }
 
-AmmoEntity::AmmoEntity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size) : Entity(entities, pos, size)
+AmmoEntity::AmmoEntity(std::vector<Entity*>* entities, glm::vec2 pos, glm::vec2 size) : Entity(entities, pos, size)
 {
 }
 

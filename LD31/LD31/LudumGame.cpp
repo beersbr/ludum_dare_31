@@ -137,32 +137,32 @@ void LudumGame::HandleEvents()
 			break;
 		case SDL_KEYDOWN:
 			{
-				this->inputKing.evalKeyDown(event);
+				this->inputKing.EvalKeyDown(event);
 				break;
 			}
 		case SDL_KEYUP:
 			{
-				this->inputKing.evalKeyUp(event);
+				this->inputKing.EvalKeyUp(event);
 				break;
 			}
 		case SDL_WINDOWEVENT:
 			{
-				this->inputKing.evalWindowEvent(event);
+				this->inputKing.EvalWindowEvent(event);
 				break;
 			}
 		case SDL_MOUSEBUTTONDOWN:
 			{
-				this->inputKing.evalMouseDown(event);
+				this->inputKing.EvalMouseDown(event);
 				break;
 			}
 		case SDL_MOUSEBUTTONUP:
 			{
-				this->inputKing.evalMouseUp(event);
+				this->inputKing.EvalMouseUp(event);
 				break;
 			}
 		case SDL_MOUSEMOTION:
 			{
-				this->inputKing.evalMouseMotion(event);
+				this->inputKing.EvalMouseMotion(event);
 				break;
 			}
 		default:

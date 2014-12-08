@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "InputHandler.h"
+#include "World.h"
 
 //These should be possible states active while the game is running
 #define SNOWGAMGE_RUN = 0x1; //Game is running
@@ -24,12 +25,13 @@ public:
 class StateHandler
 {
 public:
-	StateHandler(InputHandler* inputKing);
+	StateHandler(InputHandler* inputKing, World* gameWorld);
 	~StateHandler(void);
 	bool UpdateGameState(float time);
 	SnowGameEvent* GetSnowGameState();
 private:
 	InputHandler* inputKing;
+	World* gameWorld;
 	//void updateGameState();
 	SnowGameEvent* currentState;
 	std::stack<SnowGameEvent*> stateStack; //This might not be necessary

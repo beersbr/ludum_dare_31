@@ -7,7 +7,7 @@ class AmmoEntity :
 {
 public:
 	AmmoEntity(std::vector<Entity*>* entities);
-	AmmoEntity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size);
+	AmmoEntity(std::vector<Entity*>* entities, glm::vec2 pos, glm::vec2 size);
 	~AmmoEntity(void);
 	virtual void Update(float time); //When we update this, we will figure out where we are in our animation and apply damage to the targets.
 

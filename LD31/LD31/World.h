@@ -91,6 +91,7 @@ public:
 	bool CreateMap(SDL_Renderer* r);	
 	void RenderMap(SDL_Renderer* r, float dt);
 
+
 	void Update(float const dt);
 
 	static int worldMouseCallback(int upDown, int x, int y)
@@ -99,9 +100,17 @@ public:
 		return 0;
 	}
 
+	Entity* getEntityAtPos(glm::vec2 const pos);
+	bool isPointInEntity(glm::vec2 const pos, Entity* entity);
+	bool createMap(SDL_Renderer* r);	
+	void RenderMap(SDL_Renderer* r, float dt);
+
+
 private:
 	std::vector<Entity*> entities;
 	Loader* loaderKing;
+	std::vector<Entity*> tiles;
+
 
 private:
 	glm::vec2 getPos(int index);

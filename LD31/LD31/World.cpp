@@ -98,7 +98,7 @@ bool World::CreateMap(SDL_Renderer* r)
 	SDL_SetTextureBlendMode(hoverTexture, SDL_BLENDMODE_BLEND);
 	
 
-	InputHandler::Instance->listenLeftClick(World::worldMouseCallback);
+	InputHandler::Instance->ListenLeftClick(World::worldMouseCallback);
 	return false;
 }
 
@@ -115,8 +115,8 @@ glm::vec2 World::getTileCoord(int x = -1, int y = -1)
 	}
 	else
 	{
-		_x = InputHandler::Instance->curMouseX();
-		_y = InputHandler::Instance->curMouseY();
+		_x = InputHandler::Instance->GetMousePos().x;
+		_y = InputHandler::Instance->GetMousePos().y;
 	}
 
 	return (glm::vec2(std::floor(_x/40.0f)*40, std::floor(_y/40.0f)*40));
@@ -154,10 +154,37 @@ void World::RenderMap(SDL_Renderer* r, float dt)
 
 void World::Update(float const dt)
 {
-
-
 	// do input handler stuff here... that means taking it out of the render function
+}
 
-	//InputHandler::mouseUp()
+bool World::isPointInEntity(glm::vec2 const pos, Entity* entity)
+{
+	Uint32 tmpX = entity->pos.x + entity->size.x;
+	//check if we're in the right X direction
+	if((!pos.x >= entity->pos.x) && !(pos.x <= tmpX))
+	{
+		return false;
+	}
 
+	Uint32 tmpY = entity->pos.y + entity->size.y;
+
+	if((!pos.y >= entity->pos.y) && !(pos.y <= tmpY))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+Entity* World::getEntityAtPos(glm::vec2 const pos)
+{
+	for(std::vector<Entity*>::iterator iter = this->entities.begin(); iter != this->entities.end(); iter++)
+	{
+		if(isPointInEntity(pos, (*iter)))
+		{
+			return (*iter);
+		}
+	}
+
+	return NULL;
 }
