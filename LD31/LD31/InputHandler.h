@@ -8,6 +8,9 @@ class InputHandler
 public:
 	InputHandler(void);
 	~InputHandler(void);
+
+	static InputHandler* Instance;
+
 	void evalKeyDown(SDL_Event& ev);
 	void evalKeyUp(SDL_Event& ev);
 	void evalWindowEvent(SDL_Event& ev);
@@ -23,5 +26,6 @@ private:
 	Uint32 mouseType;
 	Uint32 mouseX;
 	Uint32 mouseY;
+
 };
 

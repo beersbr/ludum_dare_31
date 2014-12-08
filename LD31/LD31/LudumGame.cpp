@@ -92,6 +92,8 @@ void LudumGame::Init()
 	m2->transform = glm::rotate(m2->transform, -90.0f, glm::vec3(0.0, 0.0, 1.0));
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
 	world = new World(nullptr);
 	world->createMap(renderer);
 }

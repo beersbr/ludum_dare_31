@@ -12,6 +12,8 @@
 
 #include "TileEntity.h"
 #include "Util.h"
+#include "InputHandler.h"
+
 
 
 class World
@@ -37,12 +39,13 @@ private:
 private:
 	//int getPos(int x, int y);
 	glm::vec2 getPos(int index);
-
+	glm::vec2 getTileCoord(int x, int y);
+	
 	GLuint tilesVBO;
 
 	SDL_Surface* surface;
 	SDL_Texture* texture;
 
-
+	SDL_Texture* hoverTexture;
 };
 

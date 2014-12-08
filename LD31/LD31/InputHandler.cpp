@@ -1,10 +1,11 @@
 #include "InputHandler.h"
 
-
+InputHandler* InputHandler::Instance = nullptr;
 InputHandler::InputHandler(void)
 {
 	this->mouseX = 0;
 	this->mouseY = 0;
+	Instance = this;
 }
 
 
