@@ -159,7 +159,6 @@
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="StateHandler.cpp" />
-    <ClCompile Include="TileEntity.cpp" />
     <ClCompile Include="TowerEntity.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="World.cpp" />
@@ -177,7 +176,6 @@
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="StateHandler.h" />
-    <ClInclude Include="TileEntity.h" />
     <ClInclude Include="TowerEntity.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="World.h" />

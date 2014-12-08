@@ -10,7 +10,6 @@
 #include "TowerEntity.h"
 #include "EnemyEntity.h"
 #include "Loader.h"
-#include "TileEntity.h"
 #include "Util.h"
 #include "InputHandler.h"
 

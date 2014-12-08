@@ -7,8 +7,8 @@ class EnemyEntity :
 	public Entity
 {
 public:
-	EnemyEntity(std::vector<Entity*>* entities, std::map<std::string, std::string>* props); 
-	EnemyEntity(std::vector<Entity*>* entities, std::map<std::string, std::string>* props, glm::vec2 pos, glm::vec2 size);
+	EnemyEntity(std::map<std::string, std::string>* props); 
+	EnemyEntity(glm::vec2 pos, glm::vec2 size, std::map<std::string, std::string>* props);
 	~EnemyEntity();
 	virtual void Update(float time);
 private:
