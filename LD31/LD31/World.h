@@ -102,8 +102,7 @@ public:
 
 	Entity* getEntityAtPos(glm::vec2 const pos);
 	bool isPointInEntity(glm::vec2 const pos, Entity* entity);
-	bool createMap(SDL_Renderer* r);	
-	void RenderMap(SDL_Renderer* r, float dt);
+
 
 
 private:
