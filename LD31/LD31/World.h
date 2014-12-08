@@ -6,6 +6,7 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
+#include "Entity.h"
 #include "TowerEntity.h"
 #include "EnemyEntity.h"
 #include "Loader.h"
@@ -13,7 +14,7 @@
 #include "Util.h"
 #include "InputHandler.h"
 
-typedef struct DOODAD
+struct DOODAD
 {
 	static DOODAD create(int const x, int const y, int const w, int const h, SDL_Texture* tex)
 	{
@@ -56,7 +57,7 @@ typedef struct DOODAD
 	float liveFor;
 };
 
-typedef struct TILE
+struct TILE
 {
 	TILE()
 	{

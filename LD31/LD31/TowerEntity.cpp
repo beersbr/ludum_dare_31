@@ -1,7 +1,8 @@
 #include "TowerEntity.h"
 
 
-TowerEntity::TowerEntity(std::vector<Entity*>* entities, std::map<std::string, std::string>* props) : Entity(entities)
+TowerEntity::TowerEntity(glm::vec2 pos, glm::vec2 size, std::map<std::string, std::string>* props) 
+	: Entity(pos, size)
 {
 	this->bulletType = (*props)["ammoType"];
 	this->health = atoi((*props)["health"].c_str());
@@ -10,7 +11,7 @@ TowerEntity::TowerEntity(std::vector<Entity*>* entities, std::map<std::string, s
 }
 
 
-TowerEntity::TowerEntity(std::vector<Entity*>* entities, glm::vec2 pos, glm::vec2 size, std::map<std::string, std::string>* props) : Entity(entities, pos, size)
+TowerEntity::TowerEntity(std::map<std::string, std::string>* props)
 {
 	this->bulletType = (*props)["ammoType"];
 	this->health = atoi((*props)["health"].c_str());

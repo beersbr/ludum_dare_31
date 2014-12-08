@@ -73,8 +73,8 @@ bool World::CreateMap(SDL_Renderer* r)
 		TILE t;
 		t.baseTexture = tileTexture;
 
-		int x = std::floor(i % (mapWidth/40));
-		int y = i / (mapWidth/40);
+		int x = (int)std::floor(i % (mapWidth/40));
+		int y = (int)(i / (mapWidth/40));
 		dstRect.x = x * 40;
 		dstRect.y = y * 40;
 
@@ -117,8 +117,8 @@ glm::vec2 World::getTileCoord(int x = -1, int y = -1)
 	}
 	else
 	{
-		_x = InputHandler::Instance->GetMousePos().x;
-		_y = InputHandler::Instance->GetMousePos().y;
+		_x = (int)InputHandler::Instance->GetMousePos().x;
+		_y = (int)InputHandler::Instance->GetMousePos().y;
 	}
 
 	return (glm::vec2(std::floor(_x/40.0f)*40, std::floor(_y/40.0f)*40));
@@ -150,27 +150,28 @@ void World::RenderMap(SDL_Renderer* r, float dt)
 
 	// hovers
 	glm::vec2 m = getTileCoord();
-	SDL_Rect dst = {m.x, m.y, 40, 40};
+	SDL_Rect dst = {(int)m.x, (int)m.y, 40, 40};
 	SDL_RenderCopy(r, hoverTexture, &src, &dst);
 }
 
 void World::Update(float const dt)
 {
-	
+	// get mouse up and do something
 
 	// do input handler stuff here... that means taking it out of the render function
+	// clear mouse states
 }
 
 bool World::isPointInEntity(glm::vec2 const pos, Entity* entity)
 {
-	Uint32 tmpX = entity->pos.x + entity->size.x;
+	double tmpX = entity->pos.x + entity->size.x;
 	//check if we're in the right X direction
 	if((!pos.x >= entity->pos.x) && !(pos.x <= tmpX))
 	{
 		return false;
 	}
 
-	Uint32 tmpY = entity->pos.y + entity->size.y;
+	double tmpY = entity->pos.y + entity->size.y;
 
 	if((!pos.y >= entity->pos.y) && !(pos.y <= tmpY))
 	{

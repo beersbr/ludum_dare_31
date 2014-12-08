@@ -1,14 +1,5 @@
 #include "AmmoEntity.h"
 
-
-AmmoEntity::AmmoEntity(std::vector<Entity*>* entities) : Entity(entities)
-{
-}
-
-AmmoEntity::AmmoEntity(std::vector<Entity*>* entities, glm::vec2 pos, glm::vec2 size) : Entity(entities, pos, size)
-{
-}
-
 AmmoEntity::~AmmoEntity(void)
 {
 }

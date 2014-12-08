@@ -1,21 +1,24 @@
 #include "Entity.h"
 
-#include "Component.h"
+#include "World.h"
 
+Uint32 Entity::Ids = 0;
 
-Entity::Entity(glm::vec2 position, glm::vec2 size) : pos(position), size(size)
-{}
-
-Entity::Entity(std::vector<Entity*>* entities) : entities(entities)
+Uint32 Entity::RequestId()
 {
-	this->pos = glm::vec2(0.0, 0.0);
-	this->size = glm::vec2(0.0, 0.0);
+	return ++Entity::Ids;
 }
 
-Entity::Entity(std::vector<Entity*>* entities, glm::vec2 pos, glm::vec2 size) : entities(entities), pos(pos), size(size)
+Entity::Entity()
 {
+	id = Entity::RequestId();
 }
 
+Entity::Entity(glm::vec2 position, glm::vec2 size) 
+	 : pos(position), size(size)
+{
+	id = Entity::RequestId();
+}
 
 Entity::~Entity(void)
 {
