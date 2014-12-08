@@ -28,7 +28,7 @@ bool World::createTowerEntity(std::string entityName)
 		return false;
 	}
 	//Create the tower using these props
-	entities.push_back(new TowerEntity(&this->entities, towerProps));
+	entities.push_back(new TowerEntity(towerProps));
 
 	return true;
 }
@@ -48,7 +48,7 @@ bool World::createEnemyEntity(std::string entityName)
 		return false;
 	}
 	//Create the tower using these props
-	entities.push_back(new TowerEntity(&this->entities, enemyProps));
+	entities.push_back(new TowerEntity(enemyProps));
 
 	return true;
 }
