@@ -183,7 +183,7 @@ void World::RenderMap(SDL_Renderer* r, float dt)
 	}
 
 	// hovers
-	glm::vec2 m = getTileCoord();
+	glm::vec2 m = getTileCoord(InputHandler::Instance->GetMousePos().x, InputHandler::Instance->GetMousePos().y);
 	SDL_Rect dst = {(int)m.x, (int)m.y, 40, 40};
 	SDL_RenderCopy(r, hoverTexture, &src, &dst);
 }
@@ -262,10 +262,13 @@ glm::vec2 World::GetMouseUp()
 void World::EvalPath()
 {
 	// A* search
+	std::list<PATHNODE> pathnodes; // a list of all the nodes to keep the data in scope;
+
 	std::list<PATHNODE> openList;
 	std::list<PATHNODE> closedList;
 
 	PATHNODE start = { nullptr, this->start, 0, 0, Dist( this->start.posIndex, this->end.posIndex) };
+	pathnodes.push_back(start);
 	openList.push_back(start);
 
 	while(openList.size() > 0)
@@ -366,6 +369,7 @@ void World::EvalPath()
 
 		for(int i = 0; i < children.size(); ++i)
 		{
+			pathnodes.push_back(children[i]);
 			// if this tile is the end tile we are done, just need to save the path
 			if(children[i].H == 0.0)
 			{
