@@ -43,11 +43,15 @@ void InputHandler::evalMouseDown(SDL_Event& ev)
 	//Mouse button was pressed, right click left click, amiright? We might have to tell someone the mouse clicked
 	if(ev.button.button == SDL_BUTTON_LEFT)
 	{
-		fprintf(stdout, "\n[!] LEFT MOUSE DOWN!\n[=] X pos : %d\n[=] Y pos: %d",  this->mouseX, this->mouseY);
+		fprintf(stdout, "\n[!] LEFT MOUSE DOWN!\n[=] X pos : %d\n[=] Y pos: %d\n",  this->mouseX, this->mouseY);
+		for(auto i = leftClickListeners.begin(); i != leftClickListeners.end(); ++i)
+		{
+			(*i)(BUTTON_DOWN, mouseX, mouseY);
+		}
 	}
 	if(ev.button.button == SDL_BUTTON_RIGHT)
 	{
-		fprintf(stdout, "\n[!] RIGHT MOUSE DOWN!\n[=] X pos : %d\n[=] Y pos: %d",  this->mouseX, this->mouseY);
+		fprintf(stdout, "\n[!] RIGHT MOUSE DOWN!\n[=] X pos : %d\n[=] Y pos: %d\n",  this->mouseX, this->mouseY);
 	}
 
 }
@@ -71,4 +75,16 @@ Uint32 InputHandler::curMouseX()
 Uint32 InputHandler::curMouseY()
 {
 	return this->mouseY;
+}
+
+bool InputHandler::listenRightClick(MouseClickCallback ms)
+{
+	rightClickListeners.push_back(ms);
+	return false;
+}
+
+bool InputHandler::listenLeftClick(MouseClickCallback ms)
+{
+	leftClickListeners.push_back(ms);
+	return false;
 }

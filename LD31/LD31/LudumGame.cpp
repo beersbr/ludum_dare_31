@@ -95,7 +95,7 @@ void LudumGame::Init()
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
 	world = new World(nullptr);
-	world->createMap(renderer);
+	world->CreateMap(renderer);
 }
 
 void LudumGame::Update(float dt)

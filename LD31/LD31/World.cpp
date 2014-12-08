@@ -53,17 +53,7 @@ bool World::createEnemyEntity(std::string entityName)
 	return true;
 }
 
-
-bool World::createTileAtPos(glm::vec2 const pos)
-{
-	// TOOD: this needs to be moved to a config
-
-
-	return false;
-}
-
-
-bool World::createMap(SDL_Renderer* r)
+bool World::CreateMap(SDL_Renderer* r)
 {
 	int mapWidth = 1200;
 	int mapHeight = 800;
@@ -107,23 +97,28 @@ bool World::createMap(SDL_Renderer* r)
 	hoverTexture = SDL_CreateTextureFromSurface(r, s);
 	SDL_SetTextureBlendMode(hoverTexture, SDL_BLENDMODE_BLEND);
 	
+
+	InputHandler::Instance->listenLeftClick(World::worldMouseCallback);
 	return false;
 }
 
 
-glm::vec2 World::getPos(int index)
-{
-	glm::vec2 pos;
-	pos.y = std::floor(index/(800/40));
-	pos.x = index%(1200/40);
-
-	return pos;
-}
-
 glm::vec2 World::getTileCoord(int x = -1, int y = -1)
 {
-	int _x = InputHandler::Instance->curMouseX();
-	int _y = InputHandler::Instance->curMouseY();
+	int _x = 0;
+	int _y = 0;
+
+	if(x < 0 && y < 0)
+	{
+		_x = x;
+		_y = y;
+	}
+	else
+	{
+		_x = InputHandler::Instance->curMouseX();
+		_y = InputHandler::Instance->curMouseY();
+	}
+
 	return (glm::vec2(std::floor(_x/40.0f)*40, std::floor(_y/40.0f)*40));
 }
 
@@ -155,4 +150,14 @@ void World::RenderMap(SDL_Renderer* r, float dt)
 	glm::vec2 m = getTileCoord();
 	SDL_Rect dst = {m.x, m.y, 40, 40};
 	SDL_RenderCopy(r, hoverTexture, &src, &dst);
+}
+
+void World::Update(float const dt)
+{
+
+
+	// do input handler stuff here... that means taking it out of the render function
+
+	//InputHandler::mouseUp()
+
 }

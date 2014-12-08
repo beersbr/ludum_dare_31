@@ -88,11 +88,16 @@ public:
 	bool createTowerEntity(std::string entityName);
 	bool createEnemyEntity(std::string entityName);
 
-
-	bool createTileAtPos(glm::vec2 const pos);
-
-	bool createMap(SDL_Renderer* r);	
+	bool CreateMap(SDL_Renderer* r);	
 	void RenderMap(SDL_Renderer* r, float dt);
+
+	void Update(float const dt);
+
+	static int worldMouseCallback(int upDown, int x, int y)
+	{
+		fprintf(stdout, "TEST: %d, %d, %d\n", upDown, x, y);
+		return 0;
+	}
 
 private:
 	std::vector<Entity*> entities;
