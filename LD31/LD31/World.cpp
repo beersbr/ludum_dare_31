@@ -110,7 +110,7 @@ glm::vec2 World::getTileCoord(int x = -1, int y = -1)
 	int _x = 0;
 	int _y = 0;
 
-	if(x < 0 && y < 0)
+	if(x >= 0 && y >= 0)
 	{
 		_x = x;
 		_y = y;
