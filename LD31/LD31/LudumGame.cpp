@@ -112,7 +112,7 @@ void LudumGame::Render(float dt)
 	float hvh = static_cast<float>(ViewportHeight/2);
 
 	SDL_RenderClear(renderer);
-	world->RenderMap(renderer);
+	world->RenderMap(renderer, dt);
 	SDL_RenderPresent(renderer);
 }
 

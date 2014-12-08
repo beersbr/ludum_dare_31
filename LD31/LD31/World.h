@@ -8,13 +8,77 @@
 #include "TowerEntity.h"
 #include "EnemyEntity.h"
 #include "Loader.h"
-//#include "LudumGame.h"
-
 #include "TileEntity.h"
 #include "Util.h"
 #include "InputHandler.h"
 
+typedef struct DOODAD
+{
+	static DOODAD create(int const x, int const y, int const w, int const h, SDL_Texture* tex)
+	{
+		DOODAD d;
+		d.pos = new SDL_Rect();
+		d.pos->x = x;
+		d.pos->y = y;
+		d.pos->w = w;
+		d.pos->h = h;
 
+		d.texture = tex;
+		d.isDead = false;
+		d.liveFor = 10; 
+		d.life = 0;
+	}
+
+	bool update(float dt)
+	{
+		life += dt;
+		if(life >= liveFor)
+		{
+			isDead = true;
+		}
+
+		return isDead;
+	}
+
+	~DOODAD()
+	{
+		safe_delete<SDL_Rect>(pos);
+		pos = nullptr;
+
+	}
+
+	SDL_Texture* texture;
+	bool isDead;
+	SDL_Rect* pos;
+
+	float life; // they live for 10 seconds
+	float liveFor;
+};
+
+typedef struct TILE
+{
+	TILE()
+	{
+		isSelected = false;
+		isHovered = false;
+		Tower = nullptr;
+	}
+
+	bool hasTower()
+	{
+		return (Tower == nullptr);
+	}
+
+	Entity* Tower;
+
+	bool isSelected;
+	bool isHovered;
+
+	SDL_Texture* baseTexture;		// used for the map creation
+
+	glm::vec2 posPixel;
+	glm::vec2 posIndex;
+};
 
 class World
 {
@@ -30,19 +94,20 @@ public:
 	Entity* getEntityAtPos(glm::vec2 const pos);
 	bool isPointInEntity(glm::vec2 const pos, Entity* entity);
 	bool createMap(SDL_Renderer* r);	
-	void RenderMap(SDL_Renderer* r);
+	void RenderMap(SDL_Renderer* r, float dt);
 
 private:
 	std::vector<Entity*> entities;
 	Loader* loaderKing;
 	std::vector<Entity*> tiles;
 
+
 private:
-	//int getPos(int x, int y);
 	glm::vec2 getPos(int index);
 	glm::vec2 getTileCoord(int x, int y);
-	
-	GLuint tilesVBO;
+
+	std::vector<DOODAD> doodads;
+	std::vector<TILE> map;
 
 	SDL_Surface* surface;
 	SDL_Texture* texture;
