@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <algorithm>
 
 #include <glm.hpp>
@@ -90,26 +91,35 @@ public:
 
 	bool CreateMap(SDL_Renderer* r);	
 	void RenderMap(SDL_Renderer* r, float dt);
-
-
 	void Update(float const dt);
 
-	static int worldMouseCallback(int upDown, int x, int y)
+	// connectors to global events
+	static int worldLeftMouseCallback(int upDown, int x, int y)
 	{
-		fprintf(stdout, "TEST: %d, %d, %d\n", upDown, x, y);
+		fprintf(stdout, "LEFT MOUSE: %d, %d, %d\n", upDown, x, y);
+		return 0;
+	}
+	static int worldRightMouseCallback(int upDown, int x, int y)
+	{
+		fprintf(stdout, "RIGHT MOUSE: %d, %d, %d\n", upDown, x, y);
 		return 0;
 	}
 
 	Entity* getEntityAtPos(glm::vec2 const pos);
 	bool isPointInEntity(glm::vec2 const pos, Entity* entity);
 
-
+	void SetMouseDown(int x, int y);
+	void SetMouseUp(int x, int y);
+	glm::vec2 GetMouseDown();
+	glm::vec2 GetMouseUp();
 
 private:
 	std::vector<Entity*> entities;
 	Loader* loaderKing;
 	std::vector<Entity*> tiles;
 
+	glm::vec2 mouseUp;
+	glm::vec2 mouseDown;
 
 private:
 	glm::vec2 getPos(int index);
@@ -122,5 +132,8 @@ private:
 	SDL_Texture* texture;
 
 	SDL_Texture* hoverTexture;
+
+	// for listening to events
+	static std::vector<World*> listeners;
 };
 

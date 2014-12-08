@@ -4,6 +4,7 @@ InputHandler* InputHandler::Instance = nullptr;
 InputHandler::InputHandler(void) : mouseButton(NULL)
 {
 	Instance = this;
+	mousePos = glm::vec2(0.0, 0.0);
 }
 
 
@@ -43,7 +44,7 @@ void InputHandler::EvalMouseDown(SDL_Event& ev)
 	//Mouse button was pressed, right click left click, amiright? We might have to tell someone the mouse clicked
 	if(ev.button.button == SDL_BUTTON_LEFT)
 	{
-		fprintf(stdout, "\n[!] LEFT MOUSE DOWN!\n[=] X pos : %d\n[=] Y pos: %d\n",  this->mousePos.x, this->mousePos.y);
+		fprintf(stdout, "\n[!] LEFT MOUSE DOWN!\n[=] X pos : %f\n[=] Y pos: %f\n",  this->mousePos.x, this->mousePos.y);
 		for(auto i = leftClickListeners.begin(); i != leftClickListeners.end(); ++i)
 		{
 			(*i)(BUTTON_DOWN, mousePos.x, mousePos.y);
@@ -51,7 +52,7 @@ void InputHandler::EvalMouseDown(SDL_Event& ev)
 	}
 	if(ev.button.button == SDL_BUTTON_RIGHT)
 	{
-		fprintf(stdout, "\n[!] RIGHT MOUSE DOWN!\n[=] X pos : %d\n[=] Y pos: %d",  this->mousePos.x, this->mousePos.y);
+		fprintf(stdout, "\n[!] RIGHT MOUSE DOWN!\n[=] X pos : %f\n[=] Y pos: %f",  this->mousePos.x, this->mousePos.y);
 		for(auto i = leftClickListeners.begin(); i != leftClickListeners.end(); ++i)
 		{
 			(*i)(BUTTON_DOWN, mousePos.x, mousePos.y);
@@ -71,7 +72,7 @@ void InputHandler::EvalMouseUp(SDL_Event& ev)
 	//Mouse button was pressed, right click left click, amiright? We might have to tell someone the mouse clicked
 	if(ev.button.button == SDL_BUTTON_LEFT)
 	{
-		fprintf(stdout, "\n[!] LEFT MOUSE DOWN!\n[=] X pos : %d\n[=] Y pos: %d\n",  this->mousePos.x, this->mousePos.y);
+		fprintf(stdout, "\n[!] LEFT MOUSE UP!\n[=] X pos : %f\n[=] Y pos: %f\n",  this->mousePos.x, this->mousePos.y);
 		for(auto i = leftClickListeners.begin(); i != leftClickListeners.end(); ++i)
 		{
 			(*i)(BUTTON_UP, mousePos.x, mousePos.y);
@@ -79,7 +80,7 @@ void InputHandler::EvalMouseUp(SDL_Event& ev)
 	}
 	if(ev.button.button == SDL_BUTTON_RIGHT)
 	{
-		fprintf(stdout, "\n[!] RIGHT MOUSE DOWN!\n[=] X pos : %d\n[=] Y pos: %d",  this->mousePos.x, this->mousePos.y);
+		fprintf(stdout, "\n[!] RIGHT MOUSE UP!\n[=] X pos : %f\n[=] Y pos: %f",  this->mousePos.x, this->mousePos.y);
 		for(auto i = leftClickListeners.begin(); i != leftClickListeners.end(); ++i)
 		{
 			(*i)(BUTTON_UP, mousePos.x, mousePos.y);

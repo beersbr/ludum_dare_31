@@ -98,7 +98,9 @@ bool World::CreateMap(SDL_Renderer* r)
 	SDL_SetTextureBlendMode(hoverTexture, SDL_BLENDMODE_BLEND);
 	
 
-	InputHandler::Instance->ListenLeftClick(World::worldMouseCallback);
+	InputHandler::Instance->ListenLeftClick(World::worldLeftMouseCallback);
+	InputHandler::Instance->ListenRightClick(World::worldRightMouseCallback);
+
 	return false;
 }
 
@@ -154,6 +156,8 @@ void World::RenderMap(SDL_Renderer* r, float dt)
 
 void World::Update(float const dt)
 {
+	
+
 	// do input handler stuff here... that means taking it out of the render function
 }
 
@@ -187,4 +191,28 @@ Entity* World::getEntityAtPos(glm::vec2 const pos)
 	}
 
 	return NULL;
+}
+
+void World::SetMouseDown(int x, int y)
+{
+	mouseUp = glm::vec2(x, y);
+}
+
+void World::SetMouseUp(int x, int y)
+{
+	mouseDown = glm::vec2(x, y);
+}
+
+glm::vec2 World::GetMouseDown()
+{
+	glm::vec2 p = glm::vec2((float)mouseDown.x, (float)mouseDown.y);
+	mouseDown = glm::vec2(-1, -1);
+	return p;
+}
+
+glm::vec2 World::GetMouseUp()
+{
+	glm::vec2 p = glm::vec2((float)mouseUp.x, (float)mouseUp.y);
+	mouseUp = glm::vec2(-1, -1);
+	return p;
 }
