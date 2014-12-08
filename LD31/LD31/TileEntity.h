@@ -7,7 +7,7 @@ class TileEntity :
 	public Entity
 {
 public:
-	TileEntity(glm::vec3 const position, glm::vec3 const size);
+	TileEntity(glm::vec2 const position, glm::vec2 const size);
 	~TileEntity(void);
 
 	 virtual void Update(float time);

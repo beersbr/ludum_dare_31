@@ -5,7 +5,7 @@ class TowerEntity :
 {
 public:
 	TowerEntity(std::vector<Entity*>* entities, std::map<std::string, std::string>* props);
-	TowerEntity(std::vector<Entity*>* entities, glm::vec3& pos, glm::vec3& size, std::map<std::string, std::string>* props);
+	TowerEntity(std::vector<Entity*>* entities, glm::vec2 pos, glm::vec2 size, std::map<std::string, std::string>* props);
 	~TowerEntity();
 	void setTarget(glm::vec3 targetLocation); //Do some magic to determine where you need to aim
 	void isValidTarget(Entity* target); //Check if valid target is around

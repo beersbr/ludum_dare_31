@@ -26,14 +26,15 @@ public:
 
 
 	bool createTileAtPos(glm::vec2 const pos);
-
+	//Entity* getTileAtPos(glm::vec2 const pos);
+	Entity* getEntityAtPos(glm::vec2 const pos);
+	bool isPointInEntity(glm::vec2 const pos, Entity* entity);
 	bool createMap(SDL_Renderer* r);	
 	void RenderMap(SDL_Renderer* r);
 
 private:
 	std::vector<Entity*> entities;
 	Loader* loaderKing;
-
 	std::vector<Entity*> tiles;
 
 private:

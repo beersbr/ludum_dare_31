@@ -111,8 +111,8 @@ glm::vec2 World::getPos(int index)
 
 glm::vec2 World::getTileCoord(int x = -1, int y = -1)
 {
-	int _x = InputHandler::Instance->curMouseX();
-	int _y = InputHandler::Instance->curMouseY();
+	int _x = InputHandler::Instance->GetMousePos().x;
+	int _y = InputHandler::Instance->GetMousePos().y;
 	return (glm::vec2(std::floor(_x/40.0f)*40, std::floor(_y/40.0f)*40));
 }
 
@@ -125,4 +125,47 @@ void World::RenderMap(SDL_Renderer* r)
 
 	SDL_Rect dst = {m.x, m.y, 40, 40};
 	SDL_RenderCopy(r, hoverTexture, &src, &dst);
+}
+
+
+/*
+Entity* World::getTileAtPos(glm::vec2 const pos)
+{
+	for(std::vector<Entity*>::iterator iter = this->entities.begin; iter != this->entities.end; iter++)
+	{
+		if(iter
+	}
+}
+*/
+
+bool World::isPointInEntity(glm::vec2 const pos, Entity* entity)
+{
+	Uint32 tmpX = entity->pos.x + entity->size.x;
+	//check if we're in the right X direction
+	if((!pos.x >= entity->pos.x) && !(pos.x <= tmpX))
+	{
+		return false;
+	}
+
+	Uint32 tmpY = entity->pos.y + entity->size.y;
+
+	if((!pos.y >= entity->pos.y) && !(pos.y <= tmpY))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+Entity* World::getEntityAtPos(glm::vec2 const pos)
+{
+	for(std::vector<Entity*>::iterator iter = this->entities.begin(); iter != this->entities.end(); iter++)
+	{
+		if(isPointInEntity(pos, (*iter)))
+		{
+			return (*iter);
+		}
+	}
+
+	return NULL;
 }
