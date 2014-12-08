@@ -1,11 +1,15 @@
-﻿Build started 12/7/2014 6:57:12 PM.
+﻿Build started 12/7/2014 7:05:24 PM.
      1>Project "C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\LD31\LD31.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\SDL2-2.0.3\include" /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\SDL2_ttf-2.0.12\include" /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\glew-1.10.0\include" /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\rapidjson-0.1\rapidjson\include" /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\glm-0.9.4.0\glm" /IC:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\SDL2_image\include /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\ThirdParty\glew-1.10.0\lib\Release\Win32" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt AmmoEntity.cpp Component.cpp Configuration.cpp EnemyEntity.cpp Entity.cpp InputHandler.cpp Loader.cpp LudumGame.cpp main.cpp Mesh.cpp RenderComponent.cpp ShaderProgram.cpp StateHandler.cpp TileEntity.cpp TowerEntity.cpp Util.cpp World.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\SDL2-2.0.3\include" /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\SDL2_ttf-2.0.12\include" /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\glew-1.10.0\include" /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\rapidjson-0.1\rapidjson\include" /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\glm-0.9.4.0\glm" /IC:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\SDL2_image\include /I"C:\Users\matteblack\Documents\GitHub\ludum_dare_31\LD31\..\ThirdParty\glew-1.10.0\lib\Release\x64" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt AmmoEntity.cpp Component.cpp Configuration.cpp EnemyEntity.cpp Entity.cpp InputHandler.cpp Loader.cpp LudumGame.cpp main.cpp Mesh.cpp RenderComponent.cpp ShaderProgram.cpp StateHandler.cpp TileEntity.cpp TowerEntity.cpp Util.cpp World.cpp
          World.cpp
-     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.cpp(106): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.cpp(107): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.cpp(126): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.h(56): warning C4091: 'typedef ' : ignored on left of 'DOODAD' when no variable is declared
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.h(81): warning C4091: 'typedef ' : ignored on left of 'TILE' when no variable is declared
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.cpp(86): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.cpp(117): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.cpp(118): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.cpp(146): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.cpp(156): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
          Util.cpp
          TowerEntity.cpp
          TileEntity.cpp
@@ -14,13 +18,19 @@
          RenderComponent.cpp
          Mesh.cpp
          main.cpp
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.h(56): warning C4091: 'typedef ' : ignored on left of 'DOODAD' when no variable is declared
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.h(81): warning C4091: 'typedef ' : ignored on left of 'TILE' when no variable is declared
          LudumGame.cpp
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.h(56): warning C4091: 'typedef ' : ignored on left of 'DOODAD' when no variable is declared
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.h(81): warning C4091: 'typedef ' : ignored on left of 'TILE' when no variable is declared
      1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\ludumgame.cpp(195): warning C4244: 'initializing' : conversion from 'unsigned int' to 'float', possible loss of data
          Loader.cpp
      1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\loader.cpp(209): warning C4244: 'argument' : conversion from 'std::streamoff' to 'unsigned int', possible loss of data
          InputHandler.cpp
          Entity.cpp
          EnemyEntity.cpp
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.h(56): warning C4091: 'typedef ' : ignored on left of 'DOODAD' when no variable is declared
+     1>c:\users\matteblack\documents\github\ludum_dare_31\ld31\ld31\world.h(81): warning C4091: 'typedef ' : ignored on left of 'TILE' when no variable is declared
          Configuration.cpp
          Component.cpp
          AmmoEntity.cpp
@@ -48,4 +58,4 @@
 
 Build FAILED.
 
-Time Elapsed 00:00:23.79
+Time Elapsed 00:00:24.05
