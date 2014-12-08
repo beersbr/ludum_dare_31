@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <list>
+#include <cctype>
 
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -90,11 +91,14 @@ struct TILE
 };
 
 struct PATHNODE
-	{
-		PATHNODE* parent;
-		TILE tile;
-		float G, H, F;
-	};
+{
+	PATHNODE* parent;
+	TILE tile;
+	float G, H, F;
+};
+
+bool PATHNODE_sort(const PATHNODE& first, const PATHNODE& second);
+
 
 class World
 {
@@ -157,6 +161,7 @@ private:
 	std::list<TILE> safePath;
 
 	glm::vec2 GetTileCoordByIndex(int idx);
+	TILE* GetTileAtCoord(glm::vec2 coord);
 	int GetIndexByCoord(glm::vec2);
 	float Dist(glm::vec2, glm::vec2);
 };

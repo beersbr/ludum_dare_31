@@ -78,16 +78,21 @@ bool World::CreateMap(SDL_Renderer* r)
 		dstRect.x = x * 40;
 		dstRect.y = y * 40;
 
-		if(x == 0 && y == 1)
-			t.isStartTile = true, start = t;
-
-		if(x == 29 && y == 18)
-			t.isEndTile = true, end = t;
-
 		t.posPixel = glm::vec2(dstRect.x, dstRect.y);
 		t.posIndex = glm::vec2(x, y);
 
 		SDL_BlitSurface(tile, &tileSize, surface, &dstRect); 
+
+		if(x == 0 && y == 1){
+			t.isStartTile = true;
+			start = t;
+		}
+
+		if(x == 29 && y == 18){
+			t.isEndTile = true;
+			end = t;
+		}
+
 		map.push_back(t);
 	}
 
@@ -131,11 +136,9 @@ glm::vec2 World::getTileCoord(int x = -1, int y = -1)
 		_x = x;
 		_y = y;
 	}
-	else
+	else 
 	{
-		// assume mouse coords.... BOOO
-		_x = (int)InputHandler::Instance->GetMousePos().x;
-		_y = (int)InputHandler::Instance->GetMousePos().y;
+		return glm::vec2(-1, -1);
 	}
 
 	return (glm::vec2(std::floor(_x/40.0f)*40, std::floor(_y/40.0f)*40));
@@ -191,7 +194,7 @@ void World::Update(float const dt)
 
 	// do input handler stuff here... that means taking it out of the render function
 	// clear mouse states
-	//EvalPath();
+	EvalPath();
 
 	for(int i = 0; i < entities.size(); ++i)
 	{
@@ -262,7 +265,7 @@ void World::EvalPath()
 	std::list<PATHNODE> openList;
 	std::list<PATHNODE> closedList;
 
-	PATHNODE start = { nullptr, this->start, 0, 0, 0 };
+	PATHNODE start = { nullptr, this->start, 0, 0, Dist( this->start.posIndex, this->end.posIndex) };
 	openList.push_back(start);
 
 	while(openList.size() > 0)
@@ -278,10 +281,12 @@ void World::EvalPath()
 		if(N.parent)
 			pG = N.G;
 
+		TILE* t;
+
 		// NORTH 
-		if(curIdx - 30 >= 0 && curIdx - 30 < map.size()) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x, N.tile.posIndex.y-1))) /* width in tiles */
 		{
-			TILE m = map[curIdx-30];
+			TILE m = *t; // map[curIdx-30];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.0 + pG;
 			PATHNODE t = {&N, map[curIdx-30], g, h, h+g};
@@ -289,9 +294,9 @@ void World::EvalPath()
 		}
 
 		// NORTH EAST 
-		if(curIdx - 30 + 1 >= 0 && curIdx - 30 + 1 <  map.size()) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x+1, N.tile.posIndex.y-1))) /* width in tiles */
 		{
-			TILE m = map[curIdx-30+1];
+			TILE m = *t; //map[curIdx-30+1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.2 + pG;
 			PATHNODE t = {&N, map[curIdx-30+1], g, h, h+g};
@@ -299,9 +304,9 @@ void World::EvalPath()
 		}
 
 		// EAST
-		if(curIdx + 1 >= 0 && curIdx + 1 < map.size()) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x+1, N.tile.posIndex.y))) /* width in tiles */
 		{
-			TILE m = map[curIdx+1];
+			TILE m = *t; // map[curIdx+1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.0 + pG;
 			PATHNODE t = {&N, map[curIdx+1], g, h, h+g};
@@ -309,9 +314,9 @@ void World::EvalPath()
 		}
 
 		// SOUTH EAST 
-		if(curIdx + 30 + 1 >= 0 && curIdx + 30 + 1 < map.size()) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x+1, N.tile.posIndex.y+1))) /* width in tiles */
 		{
-			TILE m = map[curIdx + 30 + 1];
+			TILE m = *t; // map[curIdx + 30 + 1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.2 + pG;
 			PATHNODE t = {&N, map[curIdx + 30 + 1], g, h, h+g};
@@ -319,11 +324,9 @@ void World::EvalPath()
 		}
 
 		// SOUTH
-		if(curIdx + 30 >= 0 && curIdx + 30 < map.size()) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x, N.tile.posIndex.y+1))) /* width in tiles */
 		{
-			TILE m = map[curIdx+30];
-
-
+			TILE m = *t; //map[curIdx+30];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.0 + pG;
 			PATHNODE t = {&N, map[curIdx+30], g, h, h+g};
@@ -331,9 +334,9 @@ void World::EvalPath()
 		}
 
 		// SOUTH WEST 
-		if(curIdx + 30 - 1 >= 0 && curIdx + 30 -1 < map.size()) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x-1, N.tile.posIndex.y+1))) /* width in tiles */
 		{
-			TILE m = map[curIdx + 30 -1];
+			TILE m = *t; //map[curIdx + 30 -1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.2 + pG;
 			PATHNODE t = {&N, map[curIdx + 30 -1], g, h, h+g};
@@ -341,9 +344,9 @@ void World::EvalPath()
 		}
 
 		// WEST
-		if(curIdx - 1 >= 0 && curIdx - 1 < map.size()) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x-1, N.tile.posIndex.y))) /* width in tiles */
 		{
-			TILE m = map[curIdx - 1];
+			TILE m = *t; // map[curIdx - 1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.0 + pG;
 			PATHNODE t = {&N, map[curIdx - 1], g, h, h+g};
@@ -351,9 +354,9 @@ void World::EvalPath()
 		}
 
 		// NORTH WEST 
-		if(curIdx - 30 - 1 >= 0 && curIdx - 30 - 1 < map.size()) /* width in tiles */
+		if(t = GetTileAtCoord(glm::vec2(N.tile.posIndex.x-1, N.tile.posIndex.y-1))) /* width in tiles */
 		{
-			TILE m = map[curIdx - 30 - 1];
+			TILE m = *t; //map[curIdx - 30 - 1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.2 + pG;
 			PATHNODE t = {&N, map[curIdx - 30 - 1], g, h, h+g};
@@ -364,6 +367,11 @@ void World::EvalPath()
 		for(int i = 0; i < children.size(); ++i)
 		{
 			// if this tile is the end tile we are done, just need to save the path
+			if(children[i].H == 0.0)
+			{
+				fprintf(stdout, "FOUND END TILE!\n");
+			}
+
 			if(children[i].tile.isEndTile)
 			{
 				PATHNODE* p = &children[i];
@@ -372,17 +380,19 @@ void World::EvalPath()
 				{
 					safePath.push_front(map[GetIndexByCoord(p->tile.posIndex)]);
 				}
-				break;
+				fprintf(stdout, "Found a path!\n");
+				return;
 			}
 
+			bool dontAdd = false;
 			// if this tile has already been added to the open list AND
 			// there is it has a better F value we skip it
 			for(auto it = openList.begin(); it != openList.end(); ++it)
 			{
 				if((*it).tile.posIndex == children[i].tile.posIndex
-					&& (*it).F < children[i].F)
+					&& (*it).F <= children[i].F)
 				{
-					continue;
+					dontAdd = true;
 				}
 			}
 
@@ -390,20 +400,20 @@ void World::EvalPath()
 			for(auto it = closedList.begin(); it != closedList.end(); ++it)
 			{
 				if((*it).tile.posIndex == children[i].tile.posIndex
-					&& (*it).F < children[i].F)
+					&& (*it).F <= children[i].F)
 				{
-					continue;
+					dontAdd = true;
 				}
 			}
 
-			openList.push_back(children[i]);
+			if(!dontAdd)
+				openList.push_back(children[i]);
 		}
 		
+		openList.sort(PATHNODE_sort);
+
 		closedList.push_back(N);
 	}
-
-
-
 }
 
 
@@ -415,4 +425,17 @@ int World::GetIndexByCoord(glm::vec2 c)
 float World::Dist(glm::vec2 a, glm::vec2 b)
 {
 	return std::sqrtf(((a.x-b.x)*(a.x-b.x)) + ((a.y-b.y)*(a.y-b.y)));
+}
+
+TILE* World::GetTileAtCoord(glm::vec2 coord)
+{
+	if(coord.x < 0 || coord.y < 0 || coord.x >= 30 || coord.y >= 20)
+		return nullptr;
+
+	return &map[GetIndexByCoord(coord)];
+}
+
+bool PATHNODE_sort(const PATHNODE& first, const PATHNODE& second)
+{
+	return (first.F < second.F);
 }
