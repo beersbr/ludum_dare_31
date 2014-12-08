@@ -4,6 +4,7 @@
 World::World(Loader* loader)
 {
 	this->loaderKing = loader;
+	curTime = 0.0f;
 }
 
 
@@ -194,7 +195,12 @@ void World::Update(float const dt)
 
 	// do input handler stuff here... that means taking it out of the render function
 	// clear mouse states
-	//EvalPath();
+	if((curTime += dt) > 2){
+		//SDL_Thread
+		EvalPath();
+		curTime = 0.0;
+	}
+
 
 	for(int i = 0; i < entities.size(); ++i)
 	{
@@ -292,7 +298,8 @@ void World::EvalPath()
 			TILE m = *t; // map[curIdx-30];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.0 + pG;
-			PATHNODE t = {&N, map[curIdx-30], g, h, h+g};
+			PATHNODE* p = (new PATHNODE(N));
+			PATHNODE t = {p, map[curIdx-30], g, h, h+g};
 			children.push_back(t);
 		}
 
@@ -302,7 +309,8 @@ void World::EvalPath()
 			TILE m = *t; //map[curIdx-30+1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.2 + pG;
-			PATHNODE t = {&N, map[curIdx-30+1], g, h, h+g};
+			PATHNODE* p = (new PATHNODE(N));
+			PATHNODE t = {p, map[curIdx-30+1], g, h, h+g};
 			children.push_back(t);
 		}
 
@@ -312,7 +320,8 @@ void World::EvalPath()
 			TILE m = *t; // map[curIdx+1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.0 + pG;
-			PATHNODE t = {&N, map[curIdx+1], g, h, h+g};
+			PATHNODE* p = (new PATHNODE(N));
+			PATHNODE t = {p, map[curIdx+1], g, h, h+g};
 			children.push_back(t);
 		}
 
@@ -322,7 +331,8 @@ void World::EvalPath()
 			TILE m = *t; // map[curIdx + 30 + 1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.2 + pG;
-			PATHNODE t = {&N, map[curIdx + 30 + 1], g, h, h+g};
+			PATHNODE* p = (new PATHNODE(N));
+			PATHNODE t = {p, map[curIdx + 30 + 1], g, h, h+g};
 			children.push_back(t);
 		}
 
@@ -332,7 +342,8 @@ void World::EvalPath()
 			TILE m = *t; //map[curIdx+30];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.0 + pG;
-			PATHNODE t = {&N, map[curIdx+30], g, h, h+g};
+			PATHNODE* p = (new PATHNODE(N));
+			PATHNODE t = {p, map[curIdx+30], g, h, h+g};
 			children.push_back(t);
 		}
 
@@ -342,7 +353,8 @@ void World::EvalPath()
 			TILE m = *t; //map[curIdx + 30 -1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.2 + pG;
-			PATHNODE t = {&N, map[curIdx + 30 -1], g, h, h+g};
+			PATHNODE* p = (new PATHNODE(N));
+			PATHNODE t = {p, map[curIdx + 30 -1], g, h, h+g};
 			children.push_back(t);
 		}
 
@@ -352,7 +364,8 @@ void World::EvalPath()
 			TILE m = *t; // map[curIdx - 1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.0 + pG;
-			PATHNODE t = {&N, map[curIdx - 1], g, h, h+g};
+			PATHNODE* p = (new PATHNODE(N));
+			PATHNODE t = {p, map[curIdx - 1], g, h, h+g};
 			children.push_back(t);
 		}
 
@@ -362,7 +375,8 @@ void World::EvalPath()
 			TILE m = *t; //map[curIdx - 30 - 1];
 			int h = Dist(m.posIndex, end.posIndex);
 			int g = 1.2 + pG;
-			PATHNODE t = {&N, map[curIdx - 30 - 1], g, h, h+g};
+			PATHNODE* p = (new PATHNODE(N));
+			PATHNODE t = { p, map[curIdx - 30 - 1], g, h, h+g};
 			children.push_back(t);
 		}
 

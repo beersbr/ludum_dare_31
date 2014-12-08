@@ -164,5 +164,7 @@ private:
 	TILE* GetTileAtCoord(glm::vec2 coord);
 	int GetIndexByCoord(glm::vec2);
 	float Dist(glm::vec2, glm::vec2);
+
+	float curTime;
 };
 
