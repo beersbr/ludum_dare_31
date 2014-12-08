@@ -194,7 +194,7 @@ void World::Update(float const dt)
 
 	// do input handler stuff here... that means taking it out of the render function
 	// clear mouse states
-	EvalPath();
+	//EvalPath();
 
 	for(int i = 0; i < entities.size(); ++i)
 	{
