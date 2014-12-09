@@ -279,7 +279,8 @@ void World::Update(float const dt)
 			{
 				if((*i).posPixel == tower->pos)
 				{
-					SDL_CreateThread(CreatePathThread, "createPath", (void*)this);
+					EvalPath();
+					//SDL_CreateThread(CreatePathThread, "createPath", (void*)this);
 					break;
 				}
 			}

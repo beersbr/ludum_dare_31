@@ -46,13 +46,17 @@ void EnemyEntity::Update(float time)
 	{
 		// check if we are close enough to that position
 		// go to the next tiel if we are
-		if(world->Dist(dest, pos) < 10.0)
+		float dist = world->Dist(dest, pos);
+
+		if(dist < 10.0f)
 		{
+			bool found = false;
 			for(auto i = world->safePath.begin(); i != world->safePath.end(); ++i)
 			{
 				// the tile I am on is on the safePath
 				// am I near the center enough to try and go to the next tile?
-				if(index == world->GetIndexByCoord((*i).posIndex))
+				int worldIndex =  world->GetIndexByCoord((*i).posIndex);
+				if(index == worldIndex)
 				{
 					if((*i).isEndTile == true)
 					{
@@ -61,12 +65,29 @@ void EnemyEntity::Update(float time)
 					else
 					{
 						++i;
+						found = true;
 						dest = (*i).posPixel; 
 						break;
 					}
-					
 				}
 			}
+
+			if(!found)
+			{
+				glm::vec2 dist = glm::vec2(1200, 800);
+
+				// find the node closest to me in the safePath
+				float minDist = world->Dist(world->safePath.front().posPixel, pos);
+				for(auto i = world->safePath.begin(); i != world->safePath.end(); ++i)
+				{
+					if(world->Dist((*i).posPixel, pos) < minDist)
+					{
+						dest = (*i).posIndex;
+						minDist = world->Dist((*i).posPixel, pos);
+					}
+				}
+			}
+
 		}
 	}
 	
