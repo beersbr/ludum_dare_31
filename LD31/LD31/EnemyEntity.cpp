@@ -74,18 +74,18 @@ void EnemyEntity::Update(float time)
 
 			if(!found)
 			{
-				glm::vec2 dist = glm::vec2(1200, 800);
+				//glm::vec2 dist = glm::vec2(1200, 800);
 
-				// find the node closest to me in the safePath
-				float minDist = world->Dist(world->safePath.front().posPixel, pos);
-				for(auto i = world->safePath.begin(); i != world->safePath.end(); ++i)
-				{
-					if(world->Dist((*i).posPixel, pos) < minDist)
-					{
-						dest = (*i).posIndex;
-						minDist = world->Dist((*i).posPixel, pos);
-					}
-				}
+				//// find the node closest to me in the safePath
+				//float minDist = world->Dist(world->safePath.front().posPixel, pos);
+				//for(auto i = world->safePath.begin(); i != world->safePath.end(); ++i)
+				//{
+				//	if(world->Dist((*i).posPixel, pos) < minDist)
+				//	{
+				//		dest = (*i).posIndex;
+				//		minDist = world->Dist((*i).posPixel, pos);
+				//	}
+				//}
 			}
 
 		}
